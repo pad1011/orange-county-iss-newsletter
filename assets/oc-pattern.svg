@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Decorative on-brand geometric motif for hero background. Rendered at ~6% opacity. -->
+<svg width="240" height="240" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+  <g fill="none" stroke="#ffffff" stroke-width="1.4" opacity="0.9">
+    <circle cx="40" cy="40" r="6"/>
+    <circle cx="200" cy="80" r="6"/>
+    <circle cx="120" cy="160" r="6"/>
+    <circle cx="40" cy="200" r="6"/>
+    <path d="M40 40 H120 V160"/>
+    <path d="M200 80 H120"/>
+    <path d="M120 160 H40 V200"/>
+    <path d="M200 80 V200 H120"/>
+    <rect x="150" y="150" width="56" height="56" rx="8"/>
+    <path d="M0 120 H40 M120 160 V240 M200 200 H240"/>
+  </g>
+</svg>

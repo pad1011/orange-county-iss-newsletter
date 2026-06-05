@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Orange County Florida — FULL-COLOR primary vertical logo (for use inside a white box only).
+  Colors per Brand Guidelines primary palette: Orange #EA7603, Green #008540, Blue #00629D.
+  TODO: For production, replace with the official first-generation vector
+        (full-color vertical EPS/SVG) from OrangeNet / OCBrand@ocfl.net.
+        Per brand standards, logo art must not be redrawn for final use.
+-->
+<svg width="150" height="132" viewBox="0 0 150 132" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Orange County Florida">
+  <text x="75" y="26" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="27" letter-spacing="0.5" fill="#00629D">ORANGE</text>
+  <g transform="translate(75,66)">
+    <circle cx="0" cy="2" r="22" fill="#EA7603"/>
+    <path d="M-2 -20 C 6 -30, 22 -28, 26 -18 C 16 -14, 2 -16, -2 -20 Z" fill="#008540"/>
+    <path d="M-6 -16 C -16 -22, -30 -18, -30 -8 C -20 -8, -10 -12, -6 -16 Z" fill="#008540"/>
+    <path d="M2 -22 C 2 -30, 8 -36, 14 -36" stroke="#008540" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </g>
+  <text x="75" y="112" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="27" letter-spacing="0.5" fill="#00629D">COUNTY</text>
+  <text x="75" y="128" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="11" letter-spacing="6" fill="#00629D">FLORIDA</text>
+</svg>

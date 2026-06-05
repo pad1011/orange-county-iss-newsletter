@@ -3,167 +3,80 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Orange County ISS Newsletter</title>
-  <style>
-    :root {
-      --navy:#00497A;
-      --blue:#00629D;
-      --green:#008540;
-      --orange:#EA7603;
-      --cream:#FAF7EF;
-      --text:#333333;
-      --bg:#eef3f6;
-      --card:#ffffff;
-      --border:#d8e1e8;
-      --shadow:0 18px 50px rgba(0,50,85,.12);
-      --radius:22px;
-      --radius-sm:14px;
-    }
-    * { box-sizing:border-box; }
-    html { scroll-behavior:smooth; }
-    body {
-      margin:0;
-      font-family:Arial, Helvetica, sans-serif;
-      color:var(--text);
-      background:linear-gradient(180deg,#f5f8fb 0%,#edf3f7 100%);
-      line-height:1.6;
-    }
-    a { color:var(--blue); }
-    .wrap { max-width:1120px; margin:0 auto; padding:0 24px; }
-    .skip { position:absolute; left:-9999px; top:auto; }
-    .skip:focus { left:16px; top:16px; background:#fff; padding:10px 14px; z-index:10; }
-    header.hero {
-      background:linear-gradient(110deg, rgba(0,38,64,.90) 0%, rgba(0,73,122,.82) 48%, rgba(0,98,157,.68) 100%), url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
-      color:#fff;
-      padding:28px 0 56px;
-    }
-    .topbar {
-      display:flex; justify-content:space-between; align-items:center; gap:20px;
-      padding-bottom:34px;
-    }
-    .brand {
-      display:flex; align-items:center; gap:14px; font-size:14px; letter-spacing:.12em; text-transform:uppercase; color:#cfe1ee;
-    }
-    .logo {
-      width:46px; height:46px; border-radius:12px; background:rgba(255,255,255,.12); display:grid; place-items:center; border:1px solid rgba(255,255,255,.18);
-    }
-    .hero-grid { display:grid; grid-template-columns:1.15fr .85fr; gap:28px; align-items:end; }
-    .eyebrow { color:#bcd9ee; font-size:12px; letter-spacing:.22em; text-transform:uppercase; font-weight:bold; margin:0 0 12px; }
-    h1 { margin:0; font-size:clamp(38px,6vw,68px); line-height:1.02; max-width:11ch; }
-    .sub { margin:16px 0 0; color:#e1eef7; font-size:18px; max-width:50ch; }
-    .hero-panel {
-      background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.16); border-radius:var(--radius); padding:24px; backdrop-filter:blur(8px);
-      box-shadow:0 18px 40px rgba(0,0,0,.16);
-    }
-    .hero-panel h2 { margin:0 0 12px; font-size:18px; }
-    .hero-panel p { margin:0; color:#f0f7fb; font-size:15px; }
-    main { padding:34px 0 72px; }
-    .section { margin-bottom:26px; }
-    .grid { display:grid; gap:24px; }
-    .issue-grid { grid-template-columns:1fr 1fr; }
-    .two-col { grid-template-columns:1.1fr .9fr; }
-    .card {
-      background:var(--card); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-    .card-body { padding:28px; }
-    .tag { display:inline-flex; align-items:center; gap:10px; font-size:12px; font-weight:bold; text-transform:uppercase; letter-spacing:.16em; margin-bottom:10px; }
-    .tag::before { content:""; width:12px; height:12px; background:currentColor; display:inline-block; border-radius:3px; }
-    .tag.blue { color:var(--blue); }
-    .tag.green { color:var(--green); }
-    .tag.orange { color:var(--orange); }
-    h2 { margin:0 0 10px; color:#111; font-size:32px; line-height:1.1; }
-    h3 { margin:0 0 10px; color:var(--navy); font-size:24px; line-height:1.2; }
-    p { margin:0 0 14px; font-size:17px; }
-    .lead { font-size:19px; }
-    .accent-line { width:68px; height:5px; background:var(--orange); border-radius:999px; margin:14px 0 22px; }
-    .issue-box {
-      background:var(--cream); border:1px solid #ece5d6; border-top:5px solid var(--green); border-radius:var(--radius-sm); padding:22px;
-    }
-    .issue-item { padding:14px 0; border-top:1px solid #e8dcc6; }
-    .issue-item:first-of-type { border-top:0; padding-top:0; }
-    .issue-item strong { display:block; color:#111; margin-bottom:4px; }
-    .stats { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:24px; }
-    .stat {
-      background:var(--cream); border-radius:18px; padding:22px; text-align:center; border-top:5px solid var(--green); border-left:1px solid #dde7dd; border-right:1px solid #dde7dd; border-bottom:1px solid #dde7dd;
-    }
-    .stat.orange { border-top-color:var(--orange); border-left-color:#efe1cf; border-right-color:#efe1cf; border-bottom-color:#efe1cf; }
-    .stat .num { font-size:44px; line-height:1; font-weight:bold; letter-spacing:-.04em; margin-bottom:8px; }
-    .stat.green .num { color:var(--green); }
-    .stat.orange .num { color:var(--orange); }
-    .stat .label { font-size:12px; line-height:1.4; letter-spacing:.12em; text-transform:uppercase; color:#5a5a5a; font-weight:bold; }
-    .tip {
-      background:var(--cream); border:1px solid #ece5d6; border-top:5px solid var(--orange); border-radius:18px; padding:24px;
-    }
-    ul { margin:10px 0 0 0; padding-left:22px; }
-    li { margin-bottom:10px; font-size:17px; }
-    .cta {
-      background:linear-gradient(180deg, #ea7603 0%, #d96500 100%); color:#fff; text-align:center; padding:34px 28px; border-radius:var(--radius); box-shadow:var(--shadow);
-    }
-    .cta a.button {
-      display:inline-block; margin-top:8px; background:#fff; color:var(--navy); text-decoration:none; font-weight:bold; text-transform:uppercase; letter-spacing:.08em; padding:14px 22px; border-radius:999px;
-    }
-    footer {
-      margin-top:34px; background:var(--navy); color:#d8ebf6; border-radius:var(--radius); padding:28px;
-    }
-    footer p { font-size:15px; margin-bottom:8px; }
-    .meta { color:#9ec7e0; font-size:12px; letter-spacing:.14em; text-transform:uppercase; font-weight:bold; }
-    @media (max-width: 860px) {
-      .hero-grid, .issue-grid, .two-col { grid-template-columns:1fr; }
-    }
-    @media (max-width: 640px) {
-      .wrap { padding:0 16px; }
-      .topbar { flex-direction:column; align-items:flex-start; }
-      header.hero { padding:22px 0 40px; }
-      .card-body, .tip, footer, .hero-panel { padding:22px; }
-      h2 { font-size:28px; }
-      h3 { font-size:22px; }
-      p, li { font-size:16px; }
-      .stats { grid-template-columns:1fr; }
-      .stat .num { font-size:38px; }
-    }
-  </style>
+  <title>Inside ISS — Orange County Information Systems &amp; Services</title>
+  <meta name="description" content="Shareable web edition of the Orange County Information Systems &amp; Services (ISS) newsletter.">
+  <link rel="stylesheet" href="assets/styles.css">
 </head>
-<body>
+<body id="top">
   <a class="skip" href="#content">Skip to content</a>
-  <header class="hero">
-    <div class="wrap">
-      <div class="topbar">
-        <div class="brand">
-          <div class="logo" aria-hidden="true">
-            <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ISS logo mark">
-              <path d="M5 18.5V7.5H11.8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-              <path d="M15 7.5H21V18.5H15" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-              <path d="M8 13H18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <span>Orange County ISS</span>
-        </div>
-        <div style="font-size:13px;color:#dcebf6;">Edition 1 • [ADD MONTH YEAR]</div>
+
+  <!-- Sticky top bar with in-page section nav.
+       Kept OUTSIDE the hero so position:sticky persists across the whole page. -->
+  <div class="iss-topbar" id="topbar">
+    <a class="iss-brand" href="#top" aria-label="Orange County ISS — back to top">
+      <!-- Reversed (white) official OC logo: approved for dark backgrounds (Brand Guidelines p.8) -->
+      <img class="iss-logo" src="assets/oc-logo-reversed.svg" alt="Orange County Florida" width="96" height="84">
+      <span class="iss-brand__name">Information Systems &amp; Services</span>
+    </a>
+    <nav class="iss-nav" aria-label="Newsletter sections">
+      <a href="#inside-iss">Inside ISS</a>
+      <a href="#iss-news">ISS News</a>
+      <a href="#ai-at-work">AI at Work</a>
+      <a href="#cyber-corner">Cybersecurity</a>
+    </nav>
+    <!-- TODO: real edition month/year -->
+    <span class="iss-edition">Edition 1 · [MONTH YEAR]</span>
+  </div>
+
+  <!-- ============================ HERO ============================ -->
+  <header class="iss-hero">
+    <div class="iss-hero__inner">
+      <div class="iss-hero__lead">
+        <p class="iss-eyebrow">Information Systems &amp; Services</p>
+        <h1 class="iss-title">Inside ISS</h1>
+        <!-- COPY EDIT: tightened from the original; removed the second "work smarter"
+             phrasing. Factual content unchanged. -->
+        <p class="iss-subtitle">A web edition on how Orange County teams are putting AI to
+          work, plus this issue's cybersecurity updates and staff guidance.</p>
+
+        <!-- Strong stats surfaced into the hero (previously buried mid-page) -->
+        <ul class="iss-stats" aria-label="This edition by the numbers">
+          <li>
+            <span class="iss-stats__num">~7,954</span>
+            <span class="iss-stats__label">Work hours saved annually</span>
+          </li>
+          <li>
+            <span class="iss-stats__num">~$200K</span>
+            <span class="iss-stats__label">Estimated savings annually</span>
+          </li>
+        </ul>
       </div>
-      <div class="hero-grid">
-        <div>
-          <p class="eyebrow">Information Systems &amp; Services</p>
-          <h1>Inside ISS</h1>
-          <p class="sub">A shareable web edition highlighting how Orange County teams are using AI to work smarter, alongside this edition's cybersecurity updates and staff guidance.</p>
-        </div>
-        <aside class="hero-panel" aria-label="Edition highlights">
-          <h2>In this edition</h2>
-          <p>AI tools supporting smarter County services and 311 staff, Procurement time and cost savings, secure remote access updates, software review guidance, and approved antivirus reminders.</p>
-        </aside>
-      </div>
+
+      <!-- Single consistent treatment: solid white card, dark text -->
+      <aside class="iss-card" aria-labelledby="edition-heading">
+        <h2 class="iss-card__title" id="edition-heading">In this edition</h2>
+        <p class="iss-card__body">AI tools supporting smarter County services and 311 staff,
+          Procurement time and cost savings, secure remote access updates, software review
+          guidance, and approved antivirus reminders.</p>
+      </aside>
     </div>
   </header>
 
+  <!-- ============================ MAIN ============================ -->
   <main id="content">
     <div class="wrap">
-      <section class="section grid issue-grid">
+
+      <!-- ---------- INSIDE ISS ---------- -->
+      <section class="section grid issue-grid" id="inside-iss">
         <article class="card">
           <div class="card-body">
             <p class="tag blue">Inside ISS</p>
             <h2>Welcome to Inside ISS</h2>
             <div class="accent-line"></div>
-            <p class="lead">We're excited to introduce a new way to keep Orange County teams informed about ISS initiatives, system improvements, and the work happening behind the scenes to support daily operations.</p>
+            <p class="lead">We're introducing a new way to keep Orange County teams informed
+              about ISS initiatives, system improvements, and the work happening behind the
+              scenes to support daily operations.</p>
+            <!-- COPY EDIT: "excited to introduce a new way" -> "introducing a new way" (trims filler). -->
           </div>
         </article>
         <aside class="issue-box" aria-label="Issue overview">
@@ -179,31 +92,65 @@
         </aside>
       </section>
 
-      <section class="section card">
+      <!-- ---------- ISS NEWS ---------- -->
+      <section class="section card" id="iss-news">
         <div class="card-body">
           <p class="tag blue">ISS News</p>
           <h2>What's New &amp; Improved</h2>
           <div class="accent-line"></div>
+
           <h3>Using AI to Support Smarter County Services</h3>
-          <p>Orange County is finding new ways to use artificial intelligence (AI) to improve daily operations and make services more convenient for residents and employees. Across multiple departments, AI tools are helping staff manage routine tasks related to procurement, finance, information technology, document review, compliance, cybersecurity, software development, and employee support.</p>
-          <p>These tools help save time, reduce repetitive work, improve accuracy, and increase efficiency, allowing employees to focus more on serving the community. Residents are already seeing benefits through faster response times and easier access to County services and information.</p>
-          <p>County leaders say AI is being introduced carefully to support employees while following County policies and maintaining appropriate technology safeguards.</p>
-          <h3 style="margin-top:28px;">Helping Staff Find Answers Faster with Custom GPT</h3>
-          <p>Orange County is using a Custom GPT tool to help 311 staff quickly find accurate information across County services and better assist residents with questions and resource navigation.</p>
-          <p>The tool reduces time spent searching for information by providing faster, more consistent responses during daily interactions and high call volumes. Staff can quickly access service details, program information, and County resources, helping improve response efficiency and reduce manual lookup efforts.</p>
-          <p>Early feedback shows the tool is improving response speed and consistency while supporting staff in delivering accurate information to residents. The effort is part of the County's broader approach to using AI tools responsibly to improve service quality and support employees in their daily work.</p>
+          <p>Orange County is finding new ways to use artificial intelligence (AI) to improve
+            daily operations and make services more convenient for residents and employees.
+            Across multiple departments, AI tools help staff manage routine tasks in procurement,
+            finance, information technology, document review, compliance, cybersecurity, software
+            development, and employee support.</p>
+          <!-- COPY EDIT: "are helping staff manage" -> "help staff manage" (tighter). -->
+          <p>These tools save time, cut repetitive work, and improve accuracy, letting employees
+            focus more on serving the community. Residents are already seeing faster response
+            times and easier access to County services and information.</p>
+          <!-- COPY EDIT: collapsed "help save time, reduce repetitive work, improve accuracy,
+               and increase efficiency" -> "save time, cut repetitive work, and improve accuracy"
+               (removes the redundant "increase efficiency"). No claims changed. -->
+          <p>County leaders say AI is being introduced carefully to support employees while
+            following County policies and maintaining appropriate technology safeguards.</p>
+
+          <h3 style="margin-top:1.75rem;">Helping Staff Find Answers Faster with Custom GPT</h3>
+          <p>Orange County is using a Custom GPT tool to help 311 staff quickly find accurate
+            information across County services and better assist residents with questions and
+            resource navigation.</p>
+          <p>The tool reduces time spent searching by giving faster, more consistent responses
+            during daily interactions and high call volumes. Staff can quickly pull up service
+            details, program information, and County resources, cutting manual lookups.</p>
+          <!-- COPY EDIT: trimmed "helping improve response efficiency and reduce manual lookup
+               efforts" -> "cutting manual lookups" (the efficiency point is already stated). -->
+          <p>Early feedback shows the tool is improving response speed and consistency while
+            helping staff deliver accurate information to residents. It is part of the County's
+            broader approach to using AI responsibly to improve service quality and support
+            employees in their daily work.</p>
+          <!-- COPY EDIT: "The effort is part of" -> "It is part of" (concise). -->
         </div>
       </section>
 
-      <section class="section grid two-col">
+      <!-- ---------- AI AT WORK ---------- -->
+      <section class="section grid two-col" id="ai-at-work">
         <article class="card">
           <div class="card-body">
             <p class="tag orange">AI at Work</p>
             <h2>Exploring Smarter Ways to Work</h2>
             <div class="accent-line"></div>
-            <h3>AI Helping Teams Work Smarter and Faster</h3>
-            <p>Orange County's Procurement Division is using artificial intelligence (AI) tools to help streamline daily operations and support employees managing high workloads. AI assists with invoice processing, contract reviews, workload assignments, change orders, and Statements of Work (SOWs), while also improving compliance and document quality.</p>
-            <p>The technology is already being used as part of the County's broader AI initiative. Current estimates show these tools save approximately 7,954 work hours and nearly $200,000 annually while improving consistency, reducing delays, and helping teams manage growing workloads more efficiently.</p>
+            <h3>AI Helping Teams Work Faster</h3>
+            <!-- COPY EDIT: heading "Work Smarter and Faster" -> "Work Faster"
+                 ("smarter" already appears in the section title above). -->
+            <p>Orange County's Procurement Division is using AI tools to streamline daily
+              operations and support employees managing heavy workloads. AI assists with invoice
+              processing, contract reviews, workload assignments, change orders, and Statements of
+              Work (SOWs), while improving compliance and document quality.</p>
+            <p>The technology is already in use as part of the County's broader AI initiative.
+              Current estimates show these tools save approximately 7,954 work hours and nearly
+              $200,000 annually while improving consistency, reducing delays, and helping teams
+              manage growing workloads.</p>
+            <!-- Stat numbers preserved exactly: ~7,954 hours and ~$200,000. -->
             <div class="stats" aria-label="Procurement impact stats">
               <div class="stat green">
                 <div class="num">~7,954</div>
@@ -219,46 +166,90 @@
 
         <aside class="tip" aria-label="Cybersecurity quick tip">
           <p class="tag orange">Quick Tip</p>
-          <h3>Protect Your Devices with County Antivirus Software</h3>
-          <p>Orange County employees can use Sophos antivirus software for approved home use with their @ocfl.net email account. Sophos helps protect devices from malware, ransomware, and phishing attacks while supporting secure remote work.</p>
-          <ul>
-            <li>Installation instructions and additional resources are available through the internal ISS portal using County login credentials.</li>
-            <li>Contractors and interns may have different access permissions and should contact ISS for assistance.</li>
+          <h3>Protect Your Devices with County Antivirus</h3>
+          <p>Orange County employees can use Sophos antivirus for approved home use with their
+            @ocfl.net email account. Sophos helps protect devices from malware, ransomware, and
+            phishing while supporting secure remote work.</p>
+          <ul class="list">
+            <li>Installation instructions and resources are on the internal ISS portal using your
+              County login credentials.</li>
+            <li>Contractors and interns may have different access permissions and should contact
+              ISS for assistance.</li>
           </ul>
-          <p style="margin-top:16px;"><strong style="color:var(--navy);">Important:</strong> Using approved antivirus software on home devices helps protect County systems and reduces cybersecurity risks.</p>
+          <p style="margin-top:1rem;"><strong style="color:var(--oc-navy-900);">Important:</strong>
+            Using approved antivirus on home devices helps protect County systems and reduces
+            cybersecurity risks.</p>
         </aside>
       </section>
 
-      <section class="section card">
+      <!-- ---------- CYBERSECURITY CORNER ---------- -->
+      <section class="section card" id="cyber-corner">
         <div class="card-body">
           <p class="tag green">Cybersecurity Corner</p>
           <h2>Stay Safe &amp; Informed</h2>
           <div class="accent-line"></div>
+
           <h3>Secure Remote Access Starts with Safe Connections</h3>
-          <p>Orange County continues improving remote access tools to help employees work securely and efficiently from different locations. Updated virtual private network (VPN) technology strengthens security, improves connection reliability, and supports a smoother experience for staff accessing County systems remotely.</p>
-          <p>Ongoing improvements focus on usability, reliability, and cost efficiency while helping protect County networks and information during remote work activities.</p>
-          <h3 style="margin-top:28px;">Before Purchasing Software, Start with ISS</h3>
-          <p>All software requests must go through ISS for review and approval before any purchase is made. Employees should work with their ISS project lead or submit a request through the formal intake process to help ensure security, compliance, and compatibility requirements are met.</p>
-          <p>Following the process helps reduce security risks, avoid duplicate tools and unnecessary spending, and support County AI and IT governance standards while helping departments make informed technology decisions.</p>
+          <p>Orange County continues improving remote access tools so employees can work securely
+            from different locations. Updated virtual private network (VPN) technology strengthens
+            security, improves connection reliability, and gives staff a smoother experience when
+            accessing County systems remotely.</p>
+          <p>Ongoing work focuses on usability, reliability, and cost efficiency while helping
+            protect County networks and information during remote work.</p>
+          <!-- COPY EDIT: "Ongoing improvements focus on" -> "Ongoing work focuses on"
+               (avoids repeating "improving/improvements" from the line above). -->
+
+          <h3 style="margin-top:1.75rem;">Before Purchasing Software, Start with ISS</h3>
+          <p>All software requests must go through ISS for review and approval before any purchase.
+            Employees should work with their ISS project lead or submit a request through the formal
+            intake process so security, compliance, and compatibility requirements are met.</p>
+          <p>Following the process reduces security risks, avoids duplicate tools and unnecessary
+            spending, and supports County AI and IT governance standards while helping departments
+            make informed technology decisions.</p>
         </div>
       </section>
 
+      <!-- ---------- CTA ---------- -->
       <section class="cta" aria-label="Contact ISS">
         <div class="wrap" style="padding:0; max-width:760px;">
-          <div style="font-size:12px; font-weight:bold; text-transform:uppercase; letter-spacing:.18em; margin-bottom:8px;">Get Involved</div>
-          <div style="font-size:32px; line-height:1.15; font-weight:bold; margin-bottom:10px;">Have a story idea? Reach out to the ISS team.</div>
-          <a class="button" href="[ADD ISS CONTACT LINK]" target="_blank" rel="noopener noreferrer">Contact the ISS Team</a>
+          <div class="eyebrow-cta">Get Involved</div>
+          <div class="cta-head">Have a story idea? Reach out to the ISS team.</div>
+          <!-- TODO: real ISS contact link (mailto: or portal URL) -->
+          <a class="button" href="#TODO-iss-contact-link" target="_blank" rel="noopener noreferrer">Contact the ISS Team</a>
         </div>
       </section>
 
+      <!-- ---------- FOOTER ---------- -->
       <footer>
-        <p style="font-size:18px; color:#fff; font-weight:bold;">Orange County Information Systems &amp; Services (ISS)</p>
+        <!-- Full-color official logo placed inside a white box, per Brand Guidelines p.10
+             (full-color logo requires a white box on colored backgrounds). -->
+        <span style="display:inline-block;background:#fff;padding:14px 18px;border-radius:10px;margin-bottom:14px;">
+          <img src="assets/oc-logo-color.svg" alt="Orange County Florida" width="110" height="97" style="display:block;">
+        </span>
+        <p style="font-size:1.1rem; color:#fff; font-weight:bold;">Orange County Information Systems &amp; Services (ISS)</p>
         <p>Supporting Orange County through technology, innovation, and service.</p>
-        <p class="meta">Orange County, Florida • Est. 1845</p>
-        <p>&copy; 2026 Orange County Government. All rights reserved.</p>
-        <p><a href="https://www.ocfl.net/" target="_blank" rel="noopener noreferrer" style="color:#fff;">www.ocfl.net</a></p>
+        <p class="meta">Orange County, Florida · Est. 1845</p>
+        <!-- TODO: confirm current copyright year -->
+        <p>&copy; [YEAR] Orange County Government. All rights reserved.</p>
+        <p><a href="https://www.ocfl.net/" target="_blank" rel="noopener noreferrer">www.ocfl.net</a></p>
       </footer>
+
     </div>
   </main>
+
+  <!-- Minimal vanilla JS: toggles an opaque sticky bar once the hero scrolls past. -->
+  <script>
+    (function () {
+      var bar = document.getElementById('topbar');
+      if (!bar) return;
+      var threshold = 80;
+      function onScroll() {
+        if (window.scrollY > threshold) { bar.classList.add('is-stuck'); }
+        else { bar.classList.remove('is-stuck'); }
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    })();
+  </script>
 </body>
 </html>
