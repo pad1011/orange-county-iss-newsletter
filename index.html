@@ -15,9 +15,7 @@
   <div class="iss-topbar" id="topbar">
     <div class="iss-topbar__inner">
       <a class="iss-brand" href="#top" aria-label="Orange County Florida — back to top">
-        <!-- Official wide/horizontal OC logo. Full-color logo sits in a white box per
-             Brand Guidelines p.10 (required on colored backgrounds). -->
-        <img class="iss-logo" src="assets/oc-logo-wide.jpg" alt="Orange County Florida" width="243" height="51">
+        <img class="iss-logo" src="assets/oc-logo-wide-color.png" alt="Orange County Florida" width="1577" height="249">
       </a>
 
       <!-- Hamburger toggle (mobile only) -->
@@ -32,8 +30,7 @@
         <a href="#cyber-corner">Cybersecurity</a>
       </nav>
 
-      <!-- TODO: replace [Month Year] with the real edition date -->
-      <span class="iss-edition">Edition 1 · [Month Year]</span>
+      <span class="iss-edition">Edition 1 · June 2026</span>
     </div>
   </div>
 
@@ -68,7 +65,7 @@
 
       <!-- ---------- INSIDE ISS ---------- -->
       <section class="section grid issue-grid" id="inside-iss">
-        <article class="card">
+        <article class="card welcome-card">
           <div class="card-body">
             <p class="tag blue">Inside ISS</p>
             <h2>Welcome to Inside ISS</h2>
@@ -77,6 +74,9 @@
               about ISS initiatives, system improvements, and the work happening behind the
               scenes to support daily operations.</p>
             <!-- COPY EDIT: "excited to introduce a new way" -> "introducing a new way" (trims filler). -->
+            <figure class="data-center-visual">
+              <img src="assets/orange-county-data-center.jpg" alt="Orange County data center" width="1280" height="720">
+            </figure>
           </div>
         </article>
         <aside class="issue-box" aria-label="Issue overview">
@@ -84,6 +84,14 @@
           <div class="issue-item">
             <strong>ISS News</strong>
             <span>AI tools supporting smarter County services and 311 staff.</span>
+          </div>
+          <div class="issue-item">
+            <strong>AI at Work</strong>
+            <span>Procurement tools saving time, improving consistency, and reducing manual work.</span>
+          </div>
+          <div class="issue-item">
+            <strong>Quick Tip</strong>
+            <span>Sophos antivirus guidance for approved County employee home use.</span>
           </div>
           <div class="issue-item">
             <strong>Cybersecurity Corner</strong>
@@ -115,7 +123,7 @@
           <p>County leaders say AI is being introduced carefully to support employees while
             following County policies and maintaining appropriate technology safeguards.</p>
 
-          <h3 style="margin-top:1.75rem;">Helping Staff Find Answers Faster with Custom GPT</h3>
+          <h3 class="story-heading">Helping Staff Find Answers Faster with Custom GPT</h3>
           <p>Orange County is using a Custom GPT tool to help 311 staff quickly find accurate
             information across County services and better assist residents with questions and
             resource navigation.</p>
@@ -167,6 +175,9 @@
         <aside class="tip" aria-label="Cybersecurity quick tip">
           <p class="tag orange">Quick Tip</p>
           <h3>Protect Your Devices with County Antivirus</h3>
+          <div class="sophos-logo-row">
+            <img src="assets/sophos-logo.svg" alt="Sophos" width="300" height="72">
+          </div>
           <p>Orange County employees can use Sophos antivirus for approved home use with their
             @ocfl.net email account. Sophos helps protect devices from malware, ransomware, and
             phishing while supporting secure remote work.</p>
@@ -176,18 +187,23 @@
             <li>Contractors and interns may have different access permissions and should contact
               ISS for assistance.</li>
           </ul>
-          <p style="margin-top:1rem;"><strong style="color:var(--oc-navy-900);">Important:</strong>
+          <p class="tip-note"><strong>Important:</strong>
             Using approved antivirus on home devices helps protect County systems and reduces
             cybersecurity risks.</p>
         </aside>
       </section>
 
       <!-- ---------- CYBERSECURITY CORNER ---------- -->
-      <section class="section card" id="cyber-corner">
+      <section class="section card cyber-card" id="cyber-corner">
         <div class="card-body">
-          <p class="tag green">Cybersecurity Corner</p>
-          <h2>Stay Safe &amp; Informed</h2>
-          <div class="accent-line"></div>
+          <div class="cyber-header">
+            <div class="cyber-title-group">
+              <p class="tag green">Cybersecurity Corner</p>
+              <h2>Stay Safe &amp; Informed</h2>
+              <div class="accent-line"></div>
+            </div>
+            <img class="cyber-corner-art" src="assets/cybersecurity-corner.svg" alt="" aria-hidden="true" width="260" height="180">
+          </div>
 
           <h3>Secure Remote Access Starts with Safe Connections</h3>
           <p>Orange County continues improving remote access tools so employees can work securely
@@ -199,7 +215,7 @@
           <!-- COPY EDIT: "Ongoing improvements focus on" -> "Ongoing work focuses on"
                (avoids repeating "improving/improvements" from the line above). -->
 
-          <h3 style="margin-top:1.75rem;">Before Purchasing Software, Start with ISS</h3>
+          <h3 class="story-heading">Before Purchasing Software, Start with ISS</h3>
           <p>All software requests must go through ISS for review and approval before any purchase.
             Employees should work with their ISS project lead or submit a request through the formal
             intake process so security, compliance, and compatibility requirements are met.</p>
@@ -210,28 +226,27 @@
       </section>
 
       <!-- ---------- CTA ---------- -->
-      <section class="cta" aria-label="Contact ISS">
-        <div class="wrap" style="padding:0; max-width:760px;">
+      <section class="cta" aria-label="Contact us">
+        <div class="cta__inner">
           <div class="eyebrow-cta">Get Involved</div>
           <div class="cta-head">Have a story idea? Reach out to the ISS team.</div>
-          <!-- TODO: real ISS contact link (mailto: or portal URL) -->
-          <a class="button" href="#TODO-iss-contact-link" target="_blank" rel="noopener noreferrer">Contact the ISS Team</a>
+          <a class="button" href="mailto:Veronica.Valentin@ocfl.net,AI@ocfl.net?subject=Inside%20ISS%20Story%20Idea">Contact Us</a>
         </div>
       </section>
 
       <!-- ---------- FOOTER ---------- -->
-      <footer>
-        <!-- Official Orange County Florida vertical logo (user-supplied), placed inside a
-             white box per Brand Guidelines p.10 (full-color logo on colored backgrounds). -->
-        <span style="display:inline-block;background:#fff;padding:16px 20px;border-radius:10px;margin-bottom:14px;">
-          <img src="assets/oc-logo-official.jpg" alt="Orange County Florida" width="120" height="123" style="display:block;height:auto;">
+      <footer class="site-footer">
+        <!-- Official Orange County Florida primary logo on a light footer surface. -->
+        <span class="footer-logo-box">
+          <img src="assets/oc-logo-primary-color.png" alt="Orange County Florida" width="648" height="853">
         </span>
-        <p style="font-size:1.1rem; color:#fff; font-weight:bold;">Orange County Information Systems &amp; Services (ISS)</p>
-        <p>Supporting Orange County through technology, innovation, and service.</p>
-        <p class="meta">Orange County, Florida · Est. 1845</p>
-        <!-- TODO: confirm current copyright year -->
-        <p>&copy; [YEAR] Orange County Government. All rights reserved.</p>
-        <p><a href="https://www.ocfl.net/" target="_blank" rel="noopener noreferrer">www.ocfl.net</a></p>
+        <div class="footer-copy">
+          <p class="footer-title">Orange County Information Systems &amp; Services (ISS)</p>
+          <p>Supporting Orange County through technology, innovation, and service.</p>
+          <p class="meta">Orange County, Florida · Est. 1845</p>
+          <p>&copy; 2026 Orange County Government. All rights reserved.</p>
+          <p><a href="https://www.ocfl.net/" target="_blank" rel="noopener noreferrer">www.ocfl.net</a></p>
+        </div>
       </footer>
 
     </div>

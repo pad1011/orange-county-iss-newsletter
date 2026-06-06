@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 180" role="img" aria-labelledby="title">
+  <title id="title">Cybersecurity shield</title>
+  <defs>
+    <linearGradient id="shield" x1="44" y1="16" x2="172" y2="162" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00629D"/>
+      <stop offset=".55" stop-color="#00497A"/>
+      <stop offset="1" stop-color="#008540"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="86" y1="46" x2="158" y2="130" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7AC143"/>
+      <stop offset="1" stop-color="#EA7603"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#00497A" flood-opacity=".22"/>
+    </filter>
+  </defs>
+  <g fill="none" fill-rule="evenodd">
+    <path stroke="#00629D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".28" d="M17 62h42m-17 0V34h37m104 101h52m-24 0v-34h31M34 142h45v-28m111-71h31m-14 0V22h28"/>
+    <circle cx="42" cy="62" r="7" fill="#7AC143"/>
+    <circle cx="79" cy="34" r="6" fill="#EA7603"/>
+    <circle cx="235" cy="101" r="6" fill="#00629D"/>
+    <circle cx="221" cy="43" r="7" fill="#7AC143"/>
+    <circle cx="34" cy="142" r="6" fill="#00629D"/>
+    <path fill="url(#shield)" d="M126.7 10.6 184 32.4v45.1c0 37.6-22.8 68.2-57.3 81.9-34.5-13.7-57.3-44.3-57.3-81.9V32.4l57.3-21.8Z" filter="url(#shadow)"/>
+    <path stroke="#fff" stroke-width="7" stroke-linejoin="round" opacity=".8" d="M126.7 28.7 166 43.8v33c0 26.1-15.6 48.1-39.3 59.4-23.7-11.3-39.3-33.3-39.3-59.4v-33l39.3-15.1Z"/>
+    <path fill="url(#glow)" d="M151.6 84.2h-7.4V70.5c0-9.9-7.7-18-17.4-18s-17.4 8.1-17.4 18v13.7H102c-4 0-7.2 3.2-7.2 7.2v33c0 4 3.2 7.2 7.2 7.2h49.6c4 0 7.2-3.2 7.2-7.2v-33c0-4-3.2-7.2-7.2-7.2Zm-31.9 0V70.5c0-4.4 3.1-7.9 7.1-7.9 4 0 7.1 3.5 7.1 7.9v13.7h-14.2Z"/>
+    <path fill="#fff" d="M131.2 107.2c0-2.4-1.9-4.4-4.4-4.4s-4.4 2-4.4 4.4c0 1.7 1 3.2 2.5 3.9v8.7h3.8v-8.7c1.5-.7 2.5-2.2 2.5-3.9Z"/>
+    <path stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".42" d="M101 48.4c7.8-4.2 16.4-6.8 25.7-7.7m34.1 34.4c0 16.9-7.5 32.2-19.4 42.9"/>
+  </g>
+</svg>
