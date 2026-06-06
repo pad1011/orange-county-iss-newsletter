@@ -13,19 +13,28 @@
   <!-- Sticky top bar with in-page section nav.
        Kept OUTSIDE the hero so position:sticky persists across the whole page. -->
   <div class="iss-topbar" id="topbar">
-    <a class="iss-brand" href="#top" aria-label="Orange County ISS — back to top">
-      <!-- Reversed (white) official OC logo: approved for dark backgrounds (Brand Guidelines p.8) -->
-      <img class="iss-logo" src="assets/oc-logo-reversed.svg" alt="Orange County Florida" width="96" height="84">
-      <span class="iss-brand__name">Information Systems &amp; Services</span>
-    </a>
-    <nav class="iss-nav" aria-label="Newsletter sections">
-      <a href="#inside-iss">Inside ISS</a>
-      <a href="#iss-news">ISS News</a>
-      <a href="#ai-at-work">AI at Work</a>
-      <a href="#cyber-corner">Cybersecurity</a>
-    </nav>
-    <!-- TODO: real edition month/year -->
-    <span class="iss-edition">Edition 1 · [MONTH YEAR]</span>
+    <div class="iss-topbar__inner">
+      <a class="iss-brand" href="#top" aria-label="Orange County ISS — back to top">
+        <!-- Reversed (white) official OC logo: approved for dark backgrounds (Brand Guidelines p.8) -->
+        <img class="iss-logo" src="assets/oc-logo-reversed.svg" alt="Orange County Florida" width="96" height="84">
+        <span class="iss-brand__name">Orange County ISS</span>
+      </a>
+
+      <!-- Hamburger toggle (mobile only) -->
+      <button class="iss-nav-toggle" id="navToggle" aria-label="Open section menu" aria-expanded="false" aria-controls="primary-nav">
+        <span class="iss-nav-toggle__bars" aria-hidden="true"></span>
+      </button>
+
+      <nav class="iss-nav" id="primary-nav" aria-label="Newsletter sections">
+        <a href="#inside-iss">Inside ISS</a>
+        <a href="#iss-news">ISS News</a>
+        <a href="#ai-at-work">AI at Work</a>
+        <a href="#cyber-corner">Cybersecurity</a>
+      </nav>
+
+      <!-- TODO: replace [Month Year] with the real edition date -->
+      <span class="iss-edition">Edition 1 · [Month Year]</span>
+    </div>
   </div>
 
   <!-- ============================ HERO ============================ -->
@@ -39,17 +48,8 @@
         <p class="iss-subtitle">A web edition on how Orange County teams are putting AI to
           work, plus this issue's cybersecurity updates and staff guidance.</p>
 
-        <!-- Strong stats surfaced into the hero (previously buried mid-page) -->
-        <ul class="iss-stats" aria-label="This edition by the numbers">
-          <li>
-            <span class="iss-stats__num">~7,954</span>
-            <span class="iss-stats__label">Work hours saved annually</span>
-          </li>
-          <li>
-            <span class="iss-stats__num">~$200K</span>
-            <span class="iss-stats__label">Estimated savings annually</span>
-          </li>
-        </ul>
+        <!-- Hero stats removed: identical figures (~7,954 hours / ~$200K) already appear
+             in the "AI at Work" section, so they now display only once there. -->
       </div>
 
       <!-- Single consistent treatment: solid white card, dark text -->
@@ -237,18 +237,31 @@
     </div>
   </main>
 
-  <!-- Minimal vanilla JS: toggles an opaque sticky bar once the hero scrolls past. -->
+  <!-- Minimal vanilla JS: mobile hamburger menu toggle. The bar itself is always
+       opaque navy via CSS, so no scroll listener is needed for legibility. -->
   <script>
     (function () {
+      var toggle = document.getElementById('navToggle');
+      var nav = document.getElementById('primary-nav');
       var bar = document.getElementById('topbar');
-      if (!bar) return;
-      var threshold = 80;
-      function onScroll() {
-        if (window.scrollY > threshold) { bar.classList.add('is-stuck'); }
-        else { bar.classList.remove('is-stuck'); }
+      if (!toggle || !nav || !bar) return;
+
+      function setOpen(open) {
+        bar.classList.toggle('nav-open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        toggle.setAttribute('aria-label', open ? 'Close section menu' : 'Open section menu');
       }
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
+      toggle.addEventListener('click', function () {
+        setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+      });
+      // Close the menu after tapping a link
+      nav.addEventListener('click', function (e) {
+        if (e.target.tagName === 'A') { setOpen(false); }
+      });
+      // Close on Escape
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { setOpen(false); }
+      });
     })();
   </script>
 </body>
