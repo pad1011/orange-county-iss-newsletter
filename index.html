@@ -1,11 +1,376 @@
-<!doctype html>
-<html lang="en">
-<head>
+<!DOCTYPE html>
+<html lang="en"><head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inside ISS — Orange County Information Systems &amp; Services</title>
   <meta name="description" content="Shareable web edition of the Orange County Information Systems &amp; Services (ISS) newsletter.">
-  <link rel="stylesheet" href="assets/styles.css">
+  <style>/* ============================================================
+   Inside ISS — Orange County Information Systems & Services
+   Static newsletter stylesheet (no build step, no framework).
+   ============================================================ */
+
+:root{
+  /* ---- OFFICIAL OCFL BRAND PALETTE (from Brand Guidelines, Jan 2026) ---- */
+  /* Primary palette: exact HTML values from the guide */
+  --oc-orange:#EA7603;       /* PMS 716  - reserved primarily for the logo */
+  --oc-green:#008540;        /* PMS 348 */
+  --oc-blue:#00629D;         /* PMS 7691 - primary brand blue */
+  /* Secondary palette (used for depth / neutrals) */
+  --oc-navy-900:#00497A;     /* PMS 7693 - dark navy */
+  --oc-navy-700:#006B93;     /* PMS 7706 - mid teal-blue */
+  --oc-bar:#0b2c4d;          /* deep navy for the sticky top bar (per request; reads as part of the dark hero) */
+  --oc-cream:#FAF7EF;        /* neutral supporting cream */
+  --oc-sand:#f7efe3;
+  --oc-sky:#e8f3f8;
+
+  /* ---- AA-safe text tints (derived; used only for text on white) ---- */
+  --oc-blue-700:#005285;     /* AA blue text on white */
+  --oc-green-700:#0f7a37;    /* AA green text on white */
+  --oc-orange-700:#b9560a;   /* AA orange text on white */
+  --oc-green-bright:#7ac143; /* decorative only */
+
+  --oc-ink:#1a2433;
+  --oc-paper:#ffffff;
+  --oc-bg:#eef3f6;
+  --oc-border:#d5e0e7;
+  --oc-shadow:0 18px 42px rgba(0,50,85,.10);
+  --radius:10px;
+  --radius-sm:8px;
+  --wrap:1080px;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;scroll-padding-top:98px;}
+body{
+  margin:0;
+  font-family:Verdana, Geneva, sans-serif;
+  color:var(--oc-ink);
+  background:
+    linear-gradient(180deg,#f8fbfd 0%,#eef5f8 46%,#f7f3eb 100%);
+  line-height:1.6;
+}
+a{color:var(--oc-blue-700);}
+
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 1.5rem;}
+
+/* Skip link */
+.skip{position:absolute;left:-9999px;top:auto;}
+.skip:focus{left:16px;top:16px;background:#fff;color:var(--oc-navy-900);
+  padding:10px 14px;border-radius:8px;z-index:60;font-weight:700;}
+
+/* ---------- HERO ---------- */
+.iss-hero{
+  position:relative;color:#fff;overflow:hidden;
+  background:
+    radial-gradient(900px 420px at 78% 4%, rgba(0,133,64,.23), transparent 62%),
+    radial-gradient(780px 380px at 15% 0%, rgba(0,182,237,.20), transparent 58%),
+    linear-gradient(145deg,#07385f 0%, var(--oc-navy-900) 50%, #0b2c4d 100%);
+}
+.iss-hero::before{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:8px;
+  background:linear-gradient(90deg,var(--oc-green),var(--oc-blue),var(--oc-orange));
+}
+.iss-hero::after{
+  content:"";position:absolute;inset:0;
+  background:url("assets/oc-pattern.svg") center/340px repeat;
+  opacity:.075;pointer-events:none;
+}
+
+/* ---------- Sticky top bar / nav ----------
+   Always-opaque deep navy so the bar is legible at the top, when scrolled
+   over light content, and on mobile. White text throughout. */
+.iss-topbar{
+  position:sticky;top:0;z-index:50;
+  background:#fff;
+  border-bottom:1px solid rgba(0,73,122,.18);
+  box-shadow:0 5px 18px rgba(0,50,85,.12);
+}
+/* Inner content constrained to page width; bar background spans full width */
+.iss-topbar__inner{
+  display:flex;align-items:center;gap:1.25rem;
+  max-width:var(--wrap);margin:0 auto;padding:.65rem 1.5rem;
+}
+
+/* Official horizontal logo on white, with no separate logo background panel. */
+.iss-brand{display:inline-flex;align-items:center;flex:0 0 auto;
+  padding:0;line-height:0;text-decoration:none;}
+.iss-brand:focus-visible{outline:2px solid var(--oc-orange);outline-offset:3px;}
+.iss-logo{display:block;width:auto;height:42px;}
+
+.iss-nav{display:flex;gap:1.1rem;margin-left:auto;align-items:center;}
+.iss-nav a{
+  color:var(--oc-navy-900);text-decoration:none;font-family:Arial, Helvetica, sans-serif;font-size:.9rem;
+  font-weight:600;white-space:nowrap;padding-bottom:3px;border-bottom:2px solid transparent;
+}
+.iss-nav a:hover,.iss-nav a:focus-visible{color:var(--oc-blue-700);border-bottom-color:var(--oc-orange);}
+.iss-nav a:focus-visible{outline:2px solid var(--oc-orange);outline-offset:4px;border-radius:3px;}
+
+.iss-edition{color:var(--oc-navy-900);font-family:Arial, Helvetica, sans-serif;font-size:.82rem;letter-spacing:0;
+  white-space:nowrap;margin-left:1.25rem;flex:0 0 auto;}
+
+/* Hamburger toggle: hidden on desktop, shown on mobile */
+.iss-nav-toggle{
+  display:none;margin-left:auto;width:42px;height:42px;padding:0;
+  background:transparent;border:1px solid rgba(0,73,122,.28);border-radius:8px;
+  cursor:pointer;align-items:center;justify-content:center;
+}
+.iss-nav-toggle:focus-visible{outline:2px solid var(--oc-orange);outline-offset:2px;}
+.iss-nav-toggle__bars,
+.iss-nav-toggle__bars::before,
+.iss-nav-toggle__bars::after{
+  content:"";display:block;width:20px;height:2px;background:#fff;border-radius:2px;
+  transition:transform .2s ease, opacity .2s ease;
+}
+.iss-nav-toggle__bars,
+.iss-nav-toggle__bars::before,
+.iss-nav-toggle__bars::after{background:var(--oc-navy-900);}
+.iss-nav-toggle__bars{position:relative;}
+.iss-nav-toggle__bars::before{position:absolute;top:-6px;left:0;}
+.iss-nav-toggle__bars::after{position:absolute;top:6px;left:0;}
+/* Animate to an X when open */
+.nav-open .iss-nav-toggle__bars{background:transparent;}
+.nav-open .iss-nav-toggle__bars::before{transform:translateY(6px) rotate(45deg);}
+.nav-open .iss-nav-toggle__bars::after{transform:translateY(-6px) rotate(-45deg);}
+
+.iss-hero__inner{
+  position:relative;z-index:1;display:grid;
+  grid-template-columns:1.4fr 1fr;gap:3rem;align-items:center;
+  max-width:var(--wrap);margin:0 auto;padding:2.85rem 1.5rem 3rem;
+}
+.iss-eyebrow{
+  font-family:Arial, Helvetica, sans-serif;text-transform:uppercase;letter-spacing:0;font-size:.78rem;font-weight:700;
+  color:rgba(255,255,255,.92);margin:0 0 .75rem;
+}
+.iss-title{font-family:Arial, Helvetica, sans-serif;font-size:clamp(3rem,6vw,4.85rem);line-height:.98;margin:0 0 1rem;font-weight:800;}
+.iss-subtitle{font-size:1.15rem;line-height:1.6;max-width:38ch;
+  color:rgba(255,255,255,.95);margin:0;}
+/* Hero stats block intentionally removed (duplicate of AI at Work stats). */
+
+/* Solid white "In this edition" card (single consistent treatment) */
+.iss-card{
+  background:var(--oc-paper);color:var(--oc-ink);border-radius:var(--radius);padding:1.9rem;
+  box-shadow:0 20px 44px -16px rgba(0,0,0,.45);border-top:6px solid var(--oc-green);
+}
+.iss-card__title{font-family:Arial, Helvetica, sans-serif;margin:0 0 .75rem;font-size:1.3rem;font-weight:700;color:var(--oc-navy-900);}
+.iss-card__body{margin:0;line-height:1.6;font-size:1rem;color:var(--oc-ink);}
+
+/* ---------- MAIN ---------- */
+main{padding:2.7rem 0 4.5rem;}
+.section{margin-bottom:1.8rem;scroll-margin-top:98px;}
+.grid{display:grid;gap:1.5rem;}
+.issue-grid{grid-template-columns:1fr 1fr;}
+.two-col{grid-template-columns:1.1fr .9fr;}
+
+.card{
+  position:relative;background:var(--oc-paper);border:1px solid var(--card-border,var(--oc-border));border-radius:var(--radius);
+  box-shadow:var(--oc-shadow);overflow:hidden;
+}
+.card:not(.cyber-card)::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;
+  background:var(--card-accent,linear-gradient(90deg,var(--oc-blue),var(--oc-green)));}
+#inside-iss article.card{--card-accent:linear-gradient(90deg,var(--oc-blue),var(--oc-green));--card-border:#c8dce8;}
+#iss-news{--card-accent:var(--oc-blue);--card-border:#c5dce9;}
+#ai-at-work article.card{--card-accent:var(--oc-orange);--card-border:#ecd7c0;}
+.card-body{padding:2rem;}
+.welcome-card .card-body{display:flex;flex-direction:column;height:100%;}
+.data-center-visual{margin:auto -1rem 0;padding-top:1.15rem;line-height:0;}
+.data-center-visual img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:contain;
+  border-radius:8px;box-shadow:0 14px 28px rgba(0,50,85,.14);}
+
+.tag{display:inline-flex;align-items:center;gap:.6rem;font-size:.72rem;font-weight:700;
+  font-family:Arial, Helvetica, sans-serif;text-transform:uppercase;letter-spacing:0;margin-bottom:.6rem;}
+.tag::before{content:"";width:12px;height:12px;background:currentColor;display:inline-block;border-radius:2px;}
+.tag.blue{color:var(--oc-blue-700);}
+.tag.green{color:var(--oc-green-700);}
+.tag.orange{color:var(--oc-orange-700);}
+
+h2{font-family:Arial, Helvetica, sans-serif;margin:0 0 .6rem;color:#111;font-size:2rem;line-height:1.1;}
+h3{font-family:Arial, Helvetica, sans-serif;margin:0 0 .6rem;color:var(--oc-navy-900);font-size:1.5rem;line-height:1.2;}
+p{margin:0 0 .9rem;font-size:1.02rem;}
+.lead{font-size:1.18rem;}
+.accent-line{width:72px;height:5px;background:linear-gradient(90deg,var(--oc-green),var(--oc-blue));border-radius:999px;margin:.85rem 0 1.35rem;}
+.story-heading{margin-top:1.75rem;}
+
+.issue-box{background:linear-gradient(180deg,#fff,var(--oc-sky));border:1px solid #d9e7ee;border-top:6px solid var(--oc-green);
+  border-radius:var(--radius-sm);padding:1.55rem;box-shadow:0 14px 34px rgba(0,50,85,.08);}
+.issue-item{padding:.95rem 0;border-top:1px solid #cddfe8;}
+.issue-item:first-of-type{border-top:0;padding-top:0;}
+.issue-item strong{display:block;color:#111;margin-bottom:.25rem;font-family:Arial, Helvetica, sans-serif;}
+
+ul.list{margin:.6rem 0 0 0;padding-left:1.4rem;}
+ul.list li{margin-bottom:.6rem;font-size:1.02rem;}
+
+.tip{background:linear-gradient(180deg,#fff,var(--oc-sand));border:1px solid #ebdecc;border-top:6px solid var(--oc-orange);
+  border-radius:var(--radius-sm);padding:1.7rem;box-shadow:0 14px 34px rgba(90,52,12,.08);}
+.sophos-logo-row{display:flex;align-items:center;margin:.15rem 0 1.05rem;}
+.sophos-logo-row img{display:block;width:176px;max-width:72%;height:auto;}
+.tip-note{margin-top:1rem;}
+.tip-note strong{color:var(--oc-navy-900);}
+
+/* Cybersecurity Corner: distinct security-themed feature card */
+.cyber-card{
+  position:relative;border-color:#bdd4e0;border-top:0;
+  background:
+    radial-gradient(520px 240px at 100% 0%, rgba(0,133,64,.13), transparent 62%),
+    radial-gradient(420px 210px at 72% 0%, rgba(0,98,157,.15), transparent 64%),
+    linear-gradient(135deg,#fff 0%,#f6fbff 52%,#edf8f1 100%);
+  box-shadow:0 24px 54px rgba(0,50,85,.16);
+}
+.cyber-card::before{content:"";position:absolute;left:0;right:0;top:0;height:8px;
+  background:linear-gradient(90deg,var(--oc-blue),var(--oc-green),var(--oc-orange));}
+.cyber-card::after{content:"";position:absolute;inset:8px 0 0;
+  background:
+    linear-gradient(90deg, rgba(0,98,157,.08) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(0,98,157,.07) 1px, transparent 1px);
+  background-size:34px 34px;opacity:.22;pointer-events:none;}
+.cyber-card .card-body{position:relative;z-index:1;padding:2.25rem 2.35rem 2.15rem;}
+.cyber-header{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1.5rem;align-items:start;margin-bottom:.1rem;}
+.cyber-title-group{min-width:0;}
+.cyber-card .tag.green{color:var(--oc-blue-700);background:rgba(0,98,157,.08);
+  border:1px solid rgba(0,98,157,.18);border-radius:4px;padding:.35rem .55rem;margin-bottom:.75rem;}
+.cyber-card .tag.green::before{background:var(--oc-green);}
+.cyber-card h2{color:var(--oc-navy-900);font-size:2.15rem;}
+.cyber-card .accent-line{width:108px;height:6px;background:linear-gradient(90deg,var(--oc-blue),var(--oc-green),var(--oc-orange));}
+.cyber-corner-art{display:block;width:190px;max-width:30vw;height:auto;margin-top:-.35rem;
+  filter:drop-shadow(0 14px 18px rgba(0,50,85,.16));}
+.cyber-card h3{display:flex;gap:.55rem;align-items:flex-start;color:var(--oc-navy-900);}
+.cyber-card h3::before{content:"";width:11px;height:11px;flex:0 0 auto;margin-top:.34rem;border-radius:50%;
+  background:var(--oc-green);box-shadow:0 0 0 4px rgba(0,133,64,.13),0 0 18px rgba(0,98,157,.25);}
+.cyber-card .story-heading{padding-top:1.35rem;border-top:1px solid rgba(0,98,157,.16);}
+
+/* Mid-page stat boxes (AI at Work) */
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem;}
+.stat{background:#f8fbf6;border-radius:var(--radius-sm);padding:1.4rem;text-align:center;
+  border:1px solid #dde7dd;border-top:5px solid var(--oc-green);}
+.stat.orange{border-top-color:var(--oc-orange);border-color:#efe1cf;border-top-color:var(--oc-orange);}
+.stat .num{font-family:Arial, Helvetica, sans-serif;font-size:2.4rem;line-height:1;font-weight:800;margin-bottom:.4rem;}
+.stat.green .num{color:var(--oc-green-700);}
+.stat.orange .num{color:#a64f09;} /* AA on cream background */
+.stat .label{font-family:Arial, Helvetica, sans-serif;font-size:.72rem;line-height:1.4;letter-spacing:0;text-transform:uppercase;color:#5a5a5a;font-weight:700;}
+@media (max-width:560px){ .stats{grid-template-columns:1fr;} }
+
+/* CTA band */
+.cta{
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--oc-navy-900) 0%,#06385f 54%,var(--oc-green-700) 100%);
+  color:#fff;text-align:center;padding:2.5rem 1.75rem;border-radius:var(--radius);box-shadow:var(--oc-shadow);
+}
+.cta::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:var(--oc-orange);}
+.cta__inner{position:relative;max-width:760px;margin:0 auto;padding:0;}
+.cta .eyebrow-cta{font-family:Arial, Helvetica, sans-serif;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0;margin-bottom:.5rem;}
+.cta .cta-head{font-family:Arial, Helvetica, sans-serif;font-size:2rem;line-height:1.15;font-weight:800;margin-bottom:.75rem;}
+.cta a.button{
+  display:inline-block;margin-top:.4rem;background:#fff;color:var(--oc-navy-900);text-decoration:none;
+  font-family:Arial, Helvetica, sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0;padding:.85rem 1.4rem;border-radius:4px;
+}
+.cta a.button:hover,.cta a.button:focus-visible{background:#f1f1f1;}
+
+/* Footer */
+.site-footer{display:grid;grid-template-columns:auto 1fr;gap:1.5rem;align-items:center;
+  margin-top:2rem;background:#fff;color:var(--oc-ink);border:1px solid var(--oc-border);
+  border-top:6px solid var(--oc-blue);border-radius:var(--radius);padding:1.8rem;box-shadow:var(--oc-shadow);}
+.footer-logo-box{display:inline-flex;align-items:center;justify-content:center;line-height:0;}
+.footer-logo-box img{display:block;width:126px;height:auto;}
+.site-footer p{font-size:.97rem;margin-bottom:.5rem;}
+.site-footer a{color:var(--oc-blue-700);}
+.footer-title{font-family:Arial, Helvetica, sans-serif;font-size:1.1rem;color:var(--oc-navy-900);font-weight:bold;}
+.meta{font-family:Arial, Helvetica, sans-serif;color:var(--oc-blue-700);font-size:.78rem;letter-spacing:0;text-transform:uppercase;font-weight:700;}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width:820px){
+  .iss-hero__inner{grid-template-columns:1fr;gap:1.45rem;padding:1.55rem 1.5rem 2rem;}
+  .issue-grid,.two-col{grid-template-columns:1fr;}
+
+  /* Top bar: brand + logo stay visible; edition hidden; hamburger appears */
+  .iss-edition{display:none;}
+  .iss-nav-toggle{display:inline-flex;}
+
+  /* Collapse the nav into a dropdown panel revealed by the hamburger.
+     Background is the same opaque navy so links are always legible. */
+  .iss-nav{
+    position:absolute;left:0;right:0;top:100%;
+    flex-direction:column;align-items:stretch;gap:0;
+    margin-left:0;
+    background:#fff;
+    box-shadow:0 14px 26px rgba(0,50,85,.18);
+    border-top:1px solid rgba(0,73,122,.14);
+    max-height:0;overflow:hidden;
+    transition:max-height .25s ease;
+  }
+  .iss-topbar.nav-open .iss-nav{max-height:320px;}
+  .iss-nav a{
+    padding:.95rem 1.5rem;border-bottom:2px solid transparent;
+    border-top:1px solid rgba(0,73,122,.10);
+    color:var(--oc-navy-900);font-size:1rem;
+  }
+  .iss-nav a:first-child{border-top:0;}
+  .iss-nav a:hover,.iss-nav a:focus-visible{border-bottom-color:transparent;border-left:3px solid var(--oc-orange);padding-left:calc(1.5rem - 3px);}
+  /* Anchor the dropdown to the bar */
+  .iss-topbar{position:sticky;}
+  .iss-topbar__inner{position:relative;}
+  .cyber-card .card-body{padding:1.75rem;}
+  .cyber-corner-art{width:156px;max-width:34vw;}
+  .site-footer{grid-template-columns:1fr;align-items:start;}
+  .footer-logo-box{justify-self:start;}
+}
+@media (max-width:560px){
+  h2{font-size:1.6rem;}
+  h3{font-size:1.3rem;}
+  .cta .cta-head{font-size:1.6rem;}
+  .iss-hero__inner{padding:1.25rem 1rem 1.65rem;}
+  .iss-topbar__inner{gap:.85rem;padding:.4rem 1rem;}
+  .iss-brand{padding:0;}
+  .iss-logo{height:32px;}
+  .card-body,.tip,.issue-box,.site-footer,.iss-card{padding:1.4rem;}
+  .cyber-card .card-body{padding:1.4rem;}
+  .cyber-header{gap:.8rem;}
+  .cyber-card h2{font-size:1.65rem;}
+  .cyber-corner-art{width:102px;max-width:30vw;margin-top:0;}
+  .sophos-logo-row img{width:150px;max-width:82%;}
+  .footer-logo-box img{width:104px;}
+}
+@media (max-width:380px){
+  .cyber-header{grid-template-columns:1fr;}
+  .cyber-corner-art{justify-self:end;width:118px;max-width:52%;margin-top:-.75rem;}
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  .iss-nav,.iss-nav-toggle__bars,
+  .iss-nav-toggle__bars::before,.iss-nav-toggle__bars::after{transition:none;}
+}
+</style>
+  <style>
+    /* June 2026 review pass — additive polish only; brand styles live in assets/styles.css */
+    h1, h2, h3 { text-wrap: balance; }
+    p, li { text-wrap: pretty; }
+    ::selection { background: rgba(0, 98, 157, .18); }
+    .stat .num { font-variant-numeric: tabular-nums; }
+    .cta a.button { transition: background .18s ease, transform .18s ease, box-shadow .18s ease; }
+    .cta a.button:hover,
+    .cta a.button:focus-visible { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(0, 0, 0, .25); }
+    @media (prefers-reduced-motion: reduce) { .cta a.button { transition: none; } .cta a.button:hover { transform: none; } }
+    /* Animated metallic-orange light orbiting the Contact Us band */
+    @property --cta-angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+    .cta { box-shadow: var(--oc-shadow), 0 0 34px rgba(234, 118, 3, .16); }
+    .cta::before { display: none; } /* static orange top bar replaced by the orbiting light */
+    .cta::after {
+      content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 3px;
+      background: conic-gradient(from var(--cta-angle),
+        transparent 0deg, transparent 252deg,
+        rgba(234, 118, 3, .30) 286deg, #ea7603 316deg, #ffc97e 330deg,
+        #fff6e8 336deg, #ffc97e 342deg, #ea7603 350deg, transparent 360deg);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      filter: drop-shadow(0 0 7px rgba(234, 118, 3, .85)) drop-shadow(0 0 20px rgba(255, 170, 60, .45));
+      animation: cta-light-orbit 4.5s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes cta-light-orbit { to { --cta-angle: 360deg; } }
+    @media (prefers-reduced-motion: reduce) { .cta::after { animation: none; } }
+  </style>
 </head>
 <body id="top">
   <a class="skip" href="#content">Skip to content</a>
@@ -40,10 +405,9 @@
       <div class="iss-hero__lead">
         <p class="iss-eyebrow">Information Systems &amp; Services</p>
         <h1 class="iss-title">Inside ISS</h1>
-        <!-- COPY EDIT: tightened from the original; removed the second "work smarter"
-             phrasing. Factual content unchanged. -->
-        <p class="iss-subtitle">A web edition on how Orange County teams are putting AI to
-          work, plus this issue's cybersecurity updates and staff guidance.</p>
+        <!-- JUNE FEEDBACK: subtitle revised to reviewer's recommended wording. -->
+        <p class="iss-subtitle">A web edition highlighting how Orange County teams are putting
+          AI to work, featuring technology updates, cybersecurity news, and staff guidance.</p>
 
         <!-- Hero stats removed: identical figures (~7,954 hours / ~$200K) already appear
              in the "AI at Work" section, so they now display only once there. -->
@@ -52,9 +416,10 @@
       <!-- Single consistent treatment: solid white card, dark text -->
       <aside class="iss-card" aria-labelledby="edition-heading">
         <h2 class="iss-card__title" id="edition-heading">In this edition</h2>
-        <p class="iss-card__body">AI tools supporting smarter County services and 311 staff,
-          Procurement time and cost savings, secure remote access updates, software review
-          guidance, and approved antivirus reminders.</p>
+        <!-- JUNE FEEDBACK: teaser rewritten per review. -->
+        <p class="iss-card__body">See how County teams are using AI, how Procurement is saving
+          time, and what employees need to know about remote access, software reviews, and
+          approved antivirus tools.</p>
       </aside>
     </div>
   </header>
@@ -70,10 +435,10 @@
             <p class="tag blue">Inside ISS</p>
             <h2>Welcome to Inside ISS</h2>
             <div class="accent-line"></div>
-            <p class="lead">We're introducing a new way to keep Orange County teams informed
-              about ISS initiatives, system improvements, and the work happening behind the
-              scenes to support daily operations.</p>
-            <!-- COPY EDIT: "excited to introduce a new way" -> "introducing a new way" (trims filler). -->
+            <!-- JUNE FEEDBACK: now states the monthly frequency. -->
+            <p class="lead">We're introducing a new monthly newsletter to keep Orange County
+              teams informed about ISS initiatives, technology improvements, and the work that
+              supports daily County operations.</p>
             <figure class="data-center-visual">
               <img src="assets/orange-county-data-center.jpg" alt="Orange County data center" width="1280" height="720">
             </figure>
@@ -83,19 +448,19 @@
           <p class="tag green">In this issue</p>
           <div class="issue-item">
             <strong>ISS News</strong>
-            <span>AI tools supporting smarter County services and 311 staff.</span>
+            <span>How AI tools are helping County staff work more efficiently.</span>
           </div>
           <div class="issue-item">
             <strong>AI at Work</strong>
-            <span>Procurement tools saving time, improving consistency, and reducing manual work.</span>
+            <span>A look at how Procurement is using AI to save time and improve daily work.</span>
           </div>
           <div class="issue-item">
             <strong>Quick Tip</strong>
-            <span>Sophos antivirus guidance for approved County employee home use.</span>
+            <span>Sophos antivirus available for approved County employee home use.</span>
           </div>
           <div class="issue-item">
             <strong>Cybersecurity Corner</strong>
-            <span>Secure remote access, software review, and antivirus reminders.</span>
+            <span>Updates on secure remote access and software review requirements.</span>
           </div>
         </aside>
       </section>
@@ -108,20 +473,18 @@
           <div class="accent-line"></div>
 
           <h3>Using AI to Support Smarter County Services</h3>
-          <p>Orange County is finding new ways to use artificial intelligence (AI) to improve
-            daily operations and make services more convenient for residents and employees.
-            Across multiple departments, AI tools help staff manage routine tasks in procurement,
-            finance, information technology, document review, compliance, cybersecurity, software
-            development, and employee support.</p>
-          <!-- COPY EDIT: "are helping staff manage" -> "help staff manage" (tighter). -->
-          <p>These tools save time, cut repetitive work, and improve accuracy, letting employees
-            focus more on serving the community. Residents are already seeing faster response
-            times and easier access to County services and information.</p>
-          <!-- COPY EDIT: collapsed "help save time, reduce repetitive work, improve accuracy,
-               and increase efficiency" -> "save time, cut repetitive work, and improve accuracy"
-               (removes the redundant "increase efficiency"). No claims changed. -->
-          <p>County leaders say AI is being introduced carefully to support employees while
-            following County policies and maintaining appropriate technology safeguards.</p>
+          <!-- JUNE FEEDBACK: story rewritten to reviewer's recommended wording, with new
+               forward-looking closing paragraph. -->
+          <p>Orange County is using artificial intelligence (AI) in new ways to help employees
+            work more efficiently and improve services for residents. Across multiple departments,
+            AI tools are helping staff with routine work in areas such as procurement, finance,
+            information technology, document review, cybersecurity, and employee support.</p>
+          <p>These tools save time and reduce repetitive work. They also help improve response
+            times and make County services easier to access.</p>
+          <p>AI tools are being introduced carefully to support employees while following County
+            policies and maintaining appropriate security safeguards.</p>
+          <p>As more departments explore AI, Inside ISS will continue sharing examples of how
+            these tools are helping employees and improving County services.</p>
 
           <h3 class="story-heading">Helping Staff Find Answers Faster with Custom GPT</h3>
           <p>Orange County is using a Custom GPT tool to help 311 staff quickly find accurate
@@ -130,13 +493,10 @@
           <p>The tool reduces time spent searching by giving faster, more consistent responses
             during daily interactions and high call volumes. Staff can quickly pull up service
             details, program information, and County resources, cutting manual lookups.</p>
-          <!-- COPY EDIT: trimmed "helping improve response efficiency and reduce manual lookup
-               efforts" -> "cutting manual lookups" (the efficiency point is already stated). -->
           <p>Early feedback shows the tool is improving response speed and consistency while
             helping staff deliver accurate information to residents. It is part of the County's
             broader approach to using AI responsibly to improve service quality and support
             employees in their daily work.</p>
-          <!-- COPY EDIT: "The effort is part of" -> "It is part of" (concise). -->
         </div>
       </section>
 
@@ -148,17 +508,15 @@
             <h2>Exploring Smarter Ways to Work</h2>
             <div class="accent-line"></div>
             <h3>AI Helping Teams Work Faster</h3>
-            <!-- COPY EDIT: heading "Work Smarter and Faster" -> "Work Faster"
-                 ("smarter" already appears in the section title above). -->
-            <p>Orange County's Procurement Division is using AI tools to streamline daily
-              operations and support employees managing heavy workloads. AI assists with invoice
-              processing, contract reviews, workload assignments, change orders, and Statements of
-              Work (SOWs), while improving compliance and document quality.</p>
-            <p>The technology is already in use as part of the County's broader AI initiative.
-              Current estimates show these tools save approximately 7,954 work hours and nearly
-              $200,000 annually while improving consistency, reducing delays, and helping teams
-              manage growing workloads.</p>
-            <!-- Stat numbers preserved exactly: ~7,954 hours and ~$200,000. -->
+            <!-- JUNE FEEDBACK: both paragraphs rewritten to reviewer's recommended wording;
+                 metric cards kept at the bottom of the article as requested. -->
+            <p>Orange County's Procurement Division is using AI technology to help employees
+              complete routine work more quickly. AI is helping with invoice processing, contract
+              reviews, workload assignments, change orders, and Statements of Work (SOWs), while
+              improving document quality and consistency.</p>
+            <p>AI technology is already helping Procurement save time and reduce manual work.
+              Current estimates show they save about 7,954 work hours and nearly $200,000 each
+              year while helping employees keep up with growing workloads.</p>
             <div class="stats" aria-label="Procurement impact stats">
               <div class="stat green">
                 <div class="num">~7,954</div>
@@ -178,14 +536,17 @@
           <div class="sophos-logo-row">
             <img src="assets/sophos-logo.svg" alt="Sophos" width="300" height="72">
           </div>
-          <p>Orange County employees can use Sophos antivirus for approved home use with their
-            @ocfl.net email account. Sophos helps protect devices from malware, ransomware, and
-            phishing while supporting secure remote work.</p>
+          <!-- JUNE FEEDBACK: rewritten to reviewer's recommended wording. Reviewer's open
+               questions (verify the personal-device claim; which ISS contact number) are
+               pending answers — update when confirmed. -->
+          <p>County employees can install approved Sophos antivirus on personal home devices
+            using their @ocfl.net email account. Sophos helps protect devices from malware,
+            ransomware, and phishing and supports secure remote work.</p>
           <ul class="list">
-            <li>Installation instructions and resources are on the internal ISS portal using your
-              County login credentials.</li>
-            <li>Contractors and interns may have different access permissions and should contact
-              ISS for assistance.</li>
+            <li>Installation instructions and resources are available on the ISS portal using
+              your County login.</li>
+            <li>Contractors and interns may have different access and should contact ISS if they
+              need help.</li>
           </ul>
           <p class="tip-note"><strong>Important:</strong>
             Using approved antivirus on home devices helps protect County systems and reduces
@@ -212,16 +573,17 @@
             accessing County systems remotely.</p>
           <p>Ongoing work focuses on usability, reliability, and cost efficiency while helping
             protect County networks and information during remote work.</p>
-          <!-- COPY EDIT: "Ongoing improvements focus on" -> "Ongoing work focuses on"
-               (avoids repeating "improving/improvements" from the line above). -->
 
           <h3 class="story-heading">Before Purchasing Software, Start with ISS</h3>
-          <p>All software requests must go through ISS for review and approval before any purchase.
-            Employees should work with their ISS project lead or submit a request through the formal
-            intake process so security, compliance, and compatibility requirements are met.</p>
-          <p>Following the process reduces security risks, avoids duplicate tools and unnecessary
-            spending, and supports County AI and IT governance standards while helping departments
-            make informed technology decisions.</p>
+          <!-- JUNE FEEDBACK: rewritten to reviewer's recommended wording (now names ServiceNow).
+               Reviewer's "Is this accurate?" question pending confirmation. -->
+          <p>All software requests must be reviewed and approved by ISS before a purchase is made.
+            Employees should submit a ServiceNow request or work with their ISS project lead
+            before purchasing new software to make sure security, compliance, and system
+            requirements are met.</p>
+          <p>Following this process helps reduce security risks, avoid duplicate tools and
+            unnecessary costs, and make sure departments get the right tools to meet their
+            business needs.</p>
         </div>
       </section>
 
@@ -244,7 +606,7 @@
           <p class="footer-title">Orange County Information Systems &amp; Services (ISS)</p>
           <p>Supporting Orange County through technology, innovation, and service.</p>
           <p class="meta">Orange County, Florida · Est. 1845</p>
-          <p>&copy; 2026 Orange County Government. All rights reserved.</p>
+          <p>© 2026 Orange County Government. All rights reserved.</p>
           <p><a href="https://www.ocfl.net/" target="_blank" rel="noopener noreferrer">www.ocfl.net</a></p>
         </div>
       </footer>
@@ -279,5 +641,7 @@
       });
     })();
   </script>
-</body>
-</html>
+  
+
+
+</body></html>
