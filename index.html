@@ -142,8 +142,8 @@ a{color:var(--oc-blue-700);}
   color:rgba(255,255,255,.92);margin:0 0 .75rem;
 }
 .iss-title{font-family:Arial, Helvetica, sans-serif;font-size:clamp(3rem,6vw,4.85rem);line-height:.98;margin:0 0 1rem;font-weight:800;}
-.iss-subtitle{font-size:1.15rem;line-height:1.6;max-width:38ch;
-  color:rgba(255,255,255,.95);margin:0;}
+.iss-topics{font-family:Arial, Helvetica, sans-serif;font-size:1rem;line-height:1.6;
+  color:#fff;margin:0;letter-spacing:.035em;font-weight:600;}
 /* Hero stats block intentionally removed (duplicate of AI at Work stats). */
 
 /* Solid white "In this edition" card (single consistent treatment) */
@@ -341,7 +341,7 @@ ul.list li{margin-bottom:.6rem;font-size:1.02rem;}
 }
 </style>
   <style>
-    /* June 2026 review pass — additive polish only; brand styles live in assets/styles.css */
+    /* July 2026 review pass — additive polish only; brand styles live in assets/styles.css */
     h1, h2, h3 { text-wrap: balance; }
     p, li { text-wrap: pretty; }
     ::selection { background: rgba(0, 98, 157, .18); }
@@ -395,7 +395,7 @@ ul.list li{margin-bottom:.6rem;font-size:1.02rem;}
         <a href="#cyber-corner">Cybersecurity</a>
       </nav>
 
-      <span class="iss-edition">Edition 1 · June 2026</span>
+      <span class="iss-edition">Edition 1 · July 2026</span>
     </div>
   </div>
 
@@ -405,9 +405,7 @@ ul.list li{margin-bottom:.6rem;font-size:1.02rem;}
       <div class="iss-hero__lead">
         <p class="iss-eyebrow">Information Systems &amp; Services</p>
         <h1 class="iss-title">Inside ISS</h1>
-        <!-- JUNE FEEDBACK: subtitle revised to reviewer's recommended wording. -->
-        <p class="iss-subtitle">A web edition highlighting how Orange County teams are putting
-          AI to work, featuring technology updates, cybersecurity news, and staff guidance.</p>
+        <div class="iss-topics" aria-label="Newsletter topics">Technology Updates • Innovation • Cybersecurity • Employee Resources</div>
 
         <!-- Hero stats removed: identical figures (~7,954 hours / ~$200K) already appear
              in the "AI at Work" section, so they now display only once there. -->
@@ -416,10 +414,7 @@ ul.list li{margin-bottom:.6rem;font-size:1.02rem;}
       <!-- Single consistent treatment: solid white card, dark text -->
       <aside class="iss-card" aria-labelledby="edition-heading">
         <h2 class="iss-card__title" id="edition-heading">In this edition</h2>
-        <!-- JUNE FEEDBACK: teaser rewritten per review. -->
-        <p class="iss-card__body">See how County teams are using AI, how Procurement is saving
-          time, and what employees need to know about remote access, software reviews, and
-          approved antivirus tools.</p>
+        <p class="iss-card__body">See how AI is helping County teams work smarter, how Procurement is saving time, and how to stay secure while working remotely.</p>
       </aside>
     </div>
   </header>
@@ -460,7 +455,7 @@ ul.list li{margin-bottom:.6rem;font-size:1.02rem;}
           </div>
           <div class="issue-item">
             <strong>Cybersecurity Corner</strong>
-            <span>Updates on secure remote access and software review requirements.</span>
+            <span>Updates on secure remote access and VPN improvements.</span>
           </div>
         </aside>
       </section>
@@ -486,17 +481,6 @@ ul.list li{margin-bottom:.6rem;font-size:1.02rem;}
           <p>As more departments explore AI, Inside ISS will continue sharing examples of how
             these tools are helping employees and improving County services.</p>
 
-          <h3 class="story-heading">Helping Staff Find Answers Faster with Custom GPT</h3>
-          <p>Orange County is using a Custom GPT tool to help 311 staff quickly find accurate
-            information across County services and better assist residents with questions and
-            resource navigation.</p>
-          <p>The tool reduces time spent searching by giving faster, more consistent responses
-            during daily interactions and high call volumes. Staff can quickly pull up service
-            details, program information, and County resources, cutting manual lookups.</p>
-          <p>Early feedback shows the tool is improving response speed and consistency while
-            helping staff deliver accurate information to residents. It is part of the County's
-            broader approach to using AI responsibly to improve service quality and support
-            employees in their daily work.</p>
         </div>
       </section>
 
@@ -532,25 +516,16 @@ ul.list li{margin-bottom:.6rem;font-size:1.02rem;}
 
         <aside class="tip" aria-label="Cybersecurity quick tip">
           <p class="tag orange">Quick Tip</p>
-          <h3>Protect Your Devices with County Antivirus</h3>
+          <h3>Working remotely? Sophos helps keep your connection to County systems secure.</h3>
           <div class="sophos-logo-row">
             <img src="assets/sophos-logo.svg" alt="Sophos" width="300" height="72">
           </div>
-          <!-- JUNE FEEDBACK: rewritten to reviewer's recommended wording. Reviewer's open
-               questions (verify the personal-device claim; which ISS contact number) are
-               pending answers — update when confirmed. -->
-          <p>County employees can install approved Sophos antivirus on personal home devices
-            using their @ocfl.net email account. Sophos helps protect devices from malware,
-            ransomware, and phishing and supports secure remote work.</p>
-          <ul class="list">
-            <li>Installation instructions and resources are available on the ISS portal using
-              your County login.</li>
-            <li>Contractors and interns may have different access and should contact ISS if they
-              need help.</li>
-          </ul>
-          <p class="tip-note"><strong>Important:</strong>
-            Using approved antivirus on home devices helps protect County systems and reduces
-            cybersecurity risks.</p>
+          <p>County employees can install approved Sophos antivirus on their personal devices using their @ocfl.net email account. Sophos helps protect your device from malware, ransomware, and phishing.</p>
+          <p>Find installation instructions on OrangeNET. It only takes a few minutes to get started!</p>
+          <p>Contractors and interns may have different access. Contact the ISS Support Center if you need assistance.</p>
+          <p><strong>Phone:</strong> <a href="tel:4078362929">407-836-2929</a> | <strong>E-mail:</strong> <a href="mailto:SupportCenter@ocfl.net">SupportCenter@ocfl.net</a></p>
+          <p><strong>Download Sophos for home use:</strong> <a href="https://home.sophos.com/en-us/employee/orange-county" target="_blank" rel="noopener noreferrer">https://home.sophos.com/en-us/employee/orange-county</a></p>
+          <p class="tip-note"><strong>Important:</strong> Installing approved antivirus on your home device helps protect your personal device and County systems from cyber threats.</p>
         </aside>
       </section>
 
@@ -566,24 +541,10 @@ ul.list li{margin-bottom:.6rem;font-size:1.02rem;}
             <img class="cyber-corner-art" src="assets/cybersecurity-corner.svg" alt="" aria-hidden="true" width="260" height="180">
           </div>
 
-          <h3>Secure Remote Access Starts with Safe Connections</h3>
-          <p>Orange County continues improving remote access tools so employees can work securely
-            from different locations. Updated virtual private network (VPN) technology strengthens
-            security, improves connection reliability, and gives staff a smoother experience when
-            accessing County systems remotely.</p>
-          <p>Ongoing work focuses on usability, reliability, and cost efficiency while helping
-            protect County networks and information during remote work.</p>
-
-          <h3 class="story-heading">Before Purchasing Software, Start with ISS</h3>
-          <!-- JUNE FEEDBACK: rewritten to reviewer's recommended wording (now names ServiceNow).
-               Reviewer's "Is this accurate?" question pending confirmation. -->
-          <p>All software requests must be reviewed and approved by ISS before a purchase is made.
-            Employees should submit a ServiceNow request or work with their ISS project lead
-            before purchasing new software to make sure security, compliance, and system
-            requirements are met.</p>
-          <p>Following this process helps reduce security risks, avoid duplicate tools and
-            unnecessary costs, and make sure departments get the right tools to meet their
-            business needs.</p>
+          <h3>Secure Remote Access Starts with a Safe Connection.</h3>
+          <p>Whether you're working from home or another approved location, using the County virtual private network (VPN) helps keep your connection to County systems secure. Recent VPN improvements provide stronger security, a more reliable connection, and a smoother remote work experience.</p>
+          <p>Orange County ISS continues to improve remote access to make it easier, more reliable, and more secure for employees.</p>
+          <p><strong>Remember:</strong> Always connect through the County VPN when accessing County systems from outside the office.</p>
         </div>
       </section>
 
