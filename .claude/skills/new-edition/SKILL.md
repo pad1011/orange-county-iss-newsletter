@@ -10,9 +10,9 @@ allowed-tools: Skill(verify) Bash(node .claude/skills/verify/scripts/check.cjs *
 
 Work through these steps in order. Keep the user informed in plain words, one short update per step.
 
-1. **Get your bearings.** Read `EDITIONS.md` (the edition log) and run `git log --oneline -5`. If no month was given above, ask which month this edition is for.
+1. **Get your bearings.** Read `EDITIONS.md` (the edition log) and run `git log --oneline -5`. If no month was given above, ask which month this edition is for. If the "How editions reach employees" section of CLAUDE.md still says NOT CONFIRMED, ask that first (AskUserQuestion: a link to the GitHub page, the newsletter pasted into an Outlook email, a SharePoint or intranet post, a PDF, or "I'm not sure"), then record the answer there.
 
-2. **Collect the content. Never invent it.** Ask the user to paste or attach the new stories, the reviewer's notes, and any new photos or links. If they have a Claude Doc link, read it. Use AskUserQuestion to ask which sections change this month, whether the numbers in "AI at Work" stay the same, and what the edition label should say (if `EDITIONS.md` has no numbering rule yet, ask, and write the answer there). If something is missing, ask. Don't fill the gap yourself.
+2. **Collect the content. Never invent it.** Ask the user to paste or attach the new stories, the reviewer's notes, and any new photos or links. If they have a Claude Doc link, read it. For each photo (attached, or inside a Word or PDF file), use the `add-photo` skill; never copy a photo straight into `assets/`. Use AskUserQuestion to ask which sections change this month, whether the numbers in "AI at Work" stay the same, and what the edition label should say (if `EDITIONS.md` has no numbering rule yet, ask, and write the answer there). If something is missing, ask. Don't fill the gap yourself.
 
 3. **Work on a branch.** If you're on `master`, create a branch named `edition/YYYY-MM` (for example `edition/2026-11`). Cloud sessions usually start on a `claude/...` branch already, and that's fine. Never commit to `master`.
 

@@ -84,6 +84,50 @@ function loadPlaywright() {
   } catch (e) { return null; }
 }
 
+// ---------- hidden photo data (EXIF, GPS location, XMP, IPTC) ----------
+function hiddenImageData(file) {
+  const d = fs.readFileSync(file), found = [];
+  if (d[0] === 0xFF && d[1] === 0xD8) {                       // JPEG segments before the pixels
+    for (let i = 2; i + 4 <= d.length && d[i] === 0xFF;) {
+      const m = d[i + 1], len = d.readUInt16BE(i + 2);
+      if (m === 0xDA) break;
+      const seg = d.subarray(i + 4, i + 2 + len);
+      if (m === 0xE1 && seg.subarray(0, 6).equals(Buffer.from('Exif\0\0', 'latin1'))) {
+        const gps = seg.includes(Buffer.from([0x88, 0x25])) || seg.includes(Buffer.from([0x25, 0x88]));
+        found.push(gps ? 'EXIF camera data with a GPS location' : 'EXIF camera data');
+      } else if (m === 0xE1) found.push(seg.includes('GPS') ? 'XMP data with a GPS location' : 'XMP data');
+      else if (m === 0xED) found.push('IPTC data');
+      i += 2 + len;
+    }
+  } else if (d.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]))) {
+    for (let i = 8; i + 8 <= d.length;) {                       // PNG chunks
+      const len = d.readUInt32BE(i), tag = d.toString('latin1', i + 4, i + 8), body = d.subarray(i + 8, i + 8 + len);
+      if (tag === 'eXIf') found.push('EXIF camera data');
+      else if (/^(iTXt|tEXt|zTXt)$/.test(tag) && (body.includes('XML:com.adobe.xmp') || body.includes('GPS'))) found.push('XMP data');
+      i += 12 + len;
+    }
+  } else if (d.toString('latin1', 0, 4) === 'RIFF' && d.toString('latin1', 8, 12) === 'WEBP') {
+    for (let i = 12; i + 8 <= d.length;) {                      // WebP chunks
+      const tag = d.toString('latin1', i, i + 4), len = d.readUInt32LE(i + 4);
+      if (tag === 'EXIF') found.push('EXIF camera data');
+      if (tag === 'XMP ') found.push('XMP data');
+      i += 8 + len + (len & 1);
+    }
+  }
+  return found;
+}
+
+function photoDataChecks() {
+  // Every image in assets/ is public, even ones no page uses yet.
+  const dir = path.join(ROOT, 'assets');
+  if (!fs.existsSync(dir)) return;
+  for (const f of fs.readdirSync(dir)) {
+    if (!/\.(?:jpe?g|png|webp)$/i.test(f)) continue;
+    const found = [...new Set(hiddenImageData(path.join(dir, f)))];
+    if (found.length) mustFix.push(`assets/${f} still contains hidden ${found.join(' and ')}. Remake it with the add-photo skill (it strips this) and delete the original.`);
+  }
+}
+
 // ---------- checks that only read the file ----------
 function lineOf(text, index) { return text.slice(0, index).split('\n').length; }
 
@@ -310,6 +354,7 @@ async function browserChecks(pw, axePath, file) {
     htmlValidate(tools.hvBin, file);
     if (pw) shots.push(...await browserChecks(pw, tools.axePath, file));
   }
+  photoDataChecks();
 
   const list = (title, items) => {
     console.log(`\n${title} (${items.length})`);

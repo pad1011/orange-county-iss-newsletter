@@ -13,6 +13,9 @@
 - GitHub Pages publishes the `master` branch. Whatever reaches `master` goes live for employees.
 - `_config.yml` keeps CLAUDE.md, README.md and EDITIONS.md off the live site. Add any new notes file to its `exclude` list.
 
+## How editions reach employees (NOT CONFIRMED YET)
+Not confirmed: a GitHub Pages link, an Outlook email, a SharePoint or intranet post, or a PDF? GitHub Pages was last updated July 14, 2026. Until the user answers, don't call the GitHub Pages page "the page employees read"; ask first, then replace this paragraph with the answer and commit it.
+
 ## Publishing safely
 - This repository and the live page are PUBLIC. Every file, HTML comment, commit message, branch name and pull request can be read by anyone and stays in the history permanently.
 - Always work on a branch (`claude/...` or `edition/YYYY-MM`) and push it. Never commit or push to `master`, and never merge pull requests; the user merges on GitHub after review.
@@ -42,6 +45,7 @@
 - Headings stay in order: one H1, then H2, then H3. Link text makes sense on its own.
 - Keep these working: the "Skip to content" link, the phone menu button (it updates `aria-expanded` and closes with Escape), and `prefers-reduced-motion`, which turns off the Contact Us animation.
 - No sideways scrolling on a phone (390px wide). Images stay under 500 KB.
+- Photos always go through the `add-photo` skill. A photo straight from a phone can contain the exact GPS location where it was taken.
 
 ## Current design (don't undo these by accident)
 - Sticky white top bar with the wide logo, four section links (`#inside-iss`, `#iss-news`, `#ai-at-work`, `#cyber-corner`), and the edition label. On phones the links move into the menu button.

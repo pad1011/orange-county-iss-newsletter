@@ -7,7 +7,7 @@ Live page: https://pad1011.github.io/orange-county-iss-newsletter/
 ## Your monthly routine with Claude
 
 1. **Open Claude Code.** Use this bookmark: [Start next month's edition](https://claude.ai/code?repositories=pad1011%2Forange-county-iss-newsletter&prompt=%2Fnew-edition%20). It opens Claude Code on the web (or the Code tab in the Claude app) with this repository already picked. Type the month after `/new-edition` (for example `/new-edition November 2026`) and press Enter.
-2. **Give Claude the content.** Paste the new stories, the reviewer's notes and any links, or attach photos. Claude asks about anything that's missing and never makes up facts.
+2. **Give Claude the content.** Paste the new stories, the reviewer's notes and any links. To add a photo, click **+** next to the message box and pick it; Claude removes the hidden location data phones add, turns it the right way up and shrinks it. Claude asks about anything that's missing and never makes up facts.
 3. **Look at the screenshots.** Claude shows you how the page looks on a computer and on a phone. Ask for changes in plain words, for example "make the Quick Tip shorter".
 4. **Send it for review.** Click **Create PR** on the **Changes** card in the Claude session, then type "PR created" so Claude can check the checklist is there. Download the desktop and phone screenshots from the file cards Claude sent in the chat and email them to your reviewer (the pull-request link shows code, not the finished page). When notes come back, reopen the same Claude session (it's in your session list), type `/apply-feedback` and paste them.
 5. **Publish.** When your reviewer approves, open the pull request on GitHub, tick every box in its checklist, then click **Merge pull request** and **Confirm merge**. Don't click **Delete branch** afterward; the branch is part of the county's record of this edition. The live page updates in about 2 to 10 minutes.
@@ -18,6 +18,7 @@ Live page: https://pad1011.github.io/orange-county-iss-newsletter/
 |---|---|
 | `/new-edition November 2026` | Starts a new month's edition, step by step |
 | `/apply-feedback` (then paste the notes) | Applies a reviewer's notes and shows a table of what changed where |
+| `/add-photo` | Prepares a photo safely for the public page |
 | `/verify` | Checks the page (accessibility, broken images, phone layout) and shows screenshots |
 | "Interview me with questions, then show me a plan" | Good start for anything bigger than a copy change |
 | "Remember that ..." | Claude writes it into CLAUDE.md. New sessions know it once that pull request is merged |

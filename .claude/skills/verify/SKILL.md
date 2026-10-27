@@ -1,6 +1,6 @@
 ---
 name: verify
-description: Check the Inside ISS newsletter page after any change to index.html, archive pages or assets. Takes desktop and phone screenshots and checks WCAG 2.1 AA accessibility, broken images and links, HTML errors and leftover placeholders. Use before every commit, and whenever the user asks to see, preview or check the page.
+description: Check the Inside ISS newsletter page after any change to index.html, archive pages or assets. Takes desktop and phone screenshots and checks WCAG 2.1 AA accessibility, broken images and links, HTML errors, leftover placeholders and hidden photo data (GPS). Use before every commit, and whenever the user asks to see, preview or check the page.
 allowed-tools: Bash(node ${CLAUDE_SKILL_DIR}/scripts/check.cjs *) Bash(node .claude/skills/verify/scripts/check.cjs *) Bash(python3 ${CLAUDE_PROJECT_DIR}/.claude/hooks/check-html.py *) Bash(python3 .claude/hooks/check-html.py *) Read(//tmp/inside-iss-check/**) SendUserFile
 ---
 

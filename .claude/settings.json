@@ -122,6 +122,24 @@
     },
     {
       "serverName": "plugin:design:gmail"
+    },
+    {
+      "serverName": "Adobe_for_creativity"
+    },
+    {
+      "serverName": "ElevenLabs"
+    },
+    {
+      "serverName": "Synthesia"
+    },
+    {
+      "serverName": "HyperFrames_by_HeyGen"
+    },
+    {
+      "serverName": "Jotform"
+    },
+    {
+      "serverName": "GovTribe"
     }
   ],
   "skillOverrides": {
