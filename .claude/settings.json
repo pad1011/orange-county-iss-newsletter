@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "outputStyle": "Plain English",
+  "env": {
+    "DISABLE_FEEDBACK_COMMAND": "1",
+    "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1"
+  },
+  "permissions": {
+    "ask": [
+      "Bash(git push *master*)",
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git reset --hard*)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(*.pem)",
+      "Read(*.key)",
+      "Bash(gh pr merge *)",
+      "mcp__github__merge_pull_request",
+      "mcp__github__enable_pr_auto_merge",
+      "mcp__github__push_files",
+      "mcp__github__create_or_update_file",
+      "mcp__github__delete_file",
+      "mcp__Uber_Eats__*",
+      "mcp__Thumbtack__*",
+      "mcp__Vanguard_Advisor_Tools__*",
+      "mcp__GovTribe__*"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/check-html.py"],
+            "timeout": 30,
+            "statusMessage": "Checking the page for HTML problems"
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "adobe-for-creativity@synced": false,
+    "bigdata-com@synced": false,
+    "box@synced": false,
+    "brightdata-plugin@synced": false,
+    "browser-use@synced": false,
+    "checkvist@synced": false,
+    "claude-for-financial-advisors@synced": false,
+    "cowork-plugin-management@synced": false,
+    "daloopa@synced": false,
+    "data@synced": false,
+    "desktop-commander@synced": false,
+    "engineering@synced": false,
+    "enterprise-search@synced": false,
+    "exa@synced": false,
+    "finance@synced": false,
+    "human-resources@synced": false,
+    "legal@synced": false,
+    "monday-com@synced": false,
+    "operations@synced": false,
+    "oracle-ai-data-platform-workbench-spark-connectors@synced": false,
+    "pdf-viewer@synced": false,
+    "product-management@synced": false,
+    "productivity@synced": false,
+    "remotion@synced": false,
+    "servicenow-sdk@synced": false,
+    "small-business@synced": false,
+    "sp-global@synced": false,
+    "superpowers@synced": false,
+    "workflow-audit@synced": false
+  },
+  "deniedMcpServers": [
+    { "serverName": "plugin:design:slack" },
+    { "serverName": "plugin:design:figma" },
+    { "serverName": "plugin:design:linear" },
+    { "serverName": "plugin:design:asana" },
+    { "serverName": "plugin:design:atlassian" },
+    { "serverName": "plugin:design:notion" },
+    { "serverName": "plugin:design:intercom" },
+    { "serverName": "plugin:design:google calendar" },
+    { "serverName": "plugin:design:gmail" }
+  ],
+  "skillOverrides": {
+    "brand-guidelines": "off",
+    "theme-factory": "off",
+    "algorithmic-art": "off",
+    "canvas-design": "off",
+    "web-artifacts-builder": "off",
+    "mcp-builder": "off",
+    "morning": "off",
+    "google-workspace": "off",
+    "local-first-delegation": "off",
+    "plugin-authoring": "off",
+    "keybindings-help": "off",
+    "computer-use": "off",
+    "chrome-browser": "off",
+    "built-in-browser": "off",
+    "import-memory": "off",
+    "internal-comms": "user-invocable-only",
+    "claude-api": "name-only",
+    "dataviz": "name-only"
+  }
+}

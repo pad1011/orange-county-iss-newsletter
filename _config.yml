@@ -1,0 +1,12 @@
+# GitHub Pages settings.
+# The live site is index.html (plus assets/ and archive/). These notes files are
+# for editors and Claude only, so keep them off the published site.
+# This list replaces Jekyll's default exclude list, so the defaults are repeated.
+exclude:
+  - CLAUDE.md
+  - README.md
+  - EDITIONS.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/

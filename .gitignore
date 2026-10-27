@@ -1,0 +1,6 @@
+# Personal or temporary files that should never be published
+.claude/settings.local.json
+CLAUDE.local.md
+node_modules/
+.DS_Store
+Thumbs.db
