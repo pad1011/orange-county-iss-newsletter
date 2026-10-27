@@ -19,11 +19,15 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const { spawnSync, execSync } = require('child_process');
+const { pathToFileURL, fileURLToPath } = require('url');
+// Name pages by their place in the repository, not by the folder the command was run from.
+const ROOT = process.env.CLAUDE_PROJECT_DIR || path.resolve(__dirname, '..', '..', '..', '..');
+const rel = f => { const r = path.relative(ROOT, f); return r && !r.startsWith('..') && !path.isAbsolute(r) ? r.split(path.sep).join('/') : f; };
 
 const AXE_VERSION = '4.14.0';
 const HTML_VALIDATE_VERSION = '11.17.0';
 const MAX_IMAGE_KB = 500;
-const PLACEHOLDER = /\[(?:CONFIRM|TODO|TBD|Month Year|YEAR)[^\]]*\]|\bTODO\b|\bTBD\b|lorem ipsum/i;
+const PLACEHOLDER = /\[(?:CONFIRM|TODO|TBD|Month Year|YEAR)\b[^\]]*\]|\bTODO\b|\bTBD\b|lorem ipsum/i;
 const VIEWPORTS = { desktop: { width: 1280, height: 900 }, phone: { width: 390, height: 844 } };
 
 // ---------- arguments ----------
@@ -32,7 +36,10 @@ const args = process.argv.slice(2);
 let outDir = process.platform === 'win32' ? path.join(os.tmpdir(), 'inside-iss-check') : '/tmp/inside-iss-check';
 const pages = [];
 for (let i = 0; i < args.length; i++) {
-  if (args[i] === '--out') outDir = path.resolve(args[++i]);
+  if (args[i] === '--out') {
+    if (!args[i + 1]) { console.error('--out needs a folder name'); process.exit(2); }
+    outDir = path.resolve(args[++i]);
+  }
   else pages.push(path.resolve(args[i]));
 }
 if (!pages.length) pages.push(path.resolve('index.html'));
@@ -50,12 +57,15 @@ function ensureTools() {
   const hvBin = path.join(dir, 'node_modules', 'html-validate', 'bin', 'html-validate.mjs');
   if (!fs.existsSync(axePath) || !fs.existsSync(hvBin)) {
     fs.mkdirSync(dir, { recursive: true });
-    const r = spawnSync('npm', ['install', '--no-save', '--no-audit', '--no-fund', '--loglevel=error',
-      '--prefix', dir, `axe-core@${AXE_VERSION}`, `html-validate@${HTML_VALIDATE_VERSION}`],
-      { encoding: 'utf8', timeout: 180000 });
+    const win = process.platform === 'win32';
+    const r = spawnSync(win ? 'npm.cmd' : 'npm', ['install', '--no-save', '--no-audit', '--no-fund', '--loglevel=error',
+      '--fetch-retries=1', '--fetch-retry-mintimeout=2000', '--fetch-retry-maxtimeout=5000', '--fetch-timeout=20000',
+      '--prefix', win ? `"${dir}"` : dir, `axe-core@${AXE_VERSION}`, `html-validate@${HTML_VALIDATE_VERSION}`],
+      { encoding: 'utf8', timeout: 180000, shell: win });
     if (r.status !== 0) {
+      const lines = (r.stderr || String(r.error || '')).trim().split('\n').filter(l => !/complete log of this run/i.test(l));
       skipped.push('Could not download the accessibility and HTML checkers (no internet?). ' +
-        'Only the basic checks ran. Details: ' + (r.stderr || r.error || '').toString().trim().split('\n').pop());
+        'Only the basic checks ran. Details: ' + (lines.find(l => /\b(?:code|E[A-Z]{3,})\b/.test(l)) || lines[0] || 'unknown'));
     }
   }
   return {
@@ -78,7 +88,7 @@ function lineOf(text, index) { return text.slice(0, index).split('\n').length; }
 function staticChecks(file) {
   const html = fs.readFileSync(file, 'utf8');
   const base = path.dirname(file);
-  const name = path.basename(file);
+  const name = rel(file);
   // Ignore HTML comments so notes to editors don't count as page content.
   const visible = html.replace(/<!--[\s\S]*?-->/g, m => m.replace(/[^\n]/g, ' '));
 
@@ -90,7 +100,8 @@ function staticChecks(file) {
   for (const [raw, idx] of refs) {
     const ref = raw.trim();
     if (!ref || /^(?:https?:|mailto:|tel:|data:|#|\/\/|javascript:)/i.test(ref)) continue;
-    const clean = decodeURIComponent(ref.split('#')[0].split('?')[0]);
+    const bare = ref.split('#')[0].split('?')[0];
+    let clean; try { clean = decodeURIComponent(bare); } catch (e) { clean = bare; }
     if (!clean || seenRefs.has(clean)) continue;
     seenRefs.add(clean);
     const target = path.join(base, clean);
@@ -116,9 +127,9 @@ function staticChecks(file) {
 
   // External links: the cloud computer often can't reach them, so list them for a person to click.
   const external = [...new Set([...visible.matchAll(/\bhref\s*=\s*"(https?:[^"]+)"/gi)].map(m => m[1]))];
-  if (external.length) humanLook.push(`Click each outside link once to make sure it still works: ${external.join(' , ')}`);
+  if (external.length) humanLook.push(`${name}: click each outside link once to make sure it still works: ${external.join(' , ')}`);
   const mail = [...new Set([...visible.matchAll(/\bhref\s*=\s*"((?:mailto|tel):[^"]+)"/gi)].map(m => m[1]))];
-  if (mail.length) humanLook.push(`Confirm these email addresses / phone numbers are current: ${mail.join(' , ')}`);
+  if (mail.length) humanLook.push(`${name}: confirm these email addresses / phone numbers are current: ${mail.join(' , ')}`);
 }
 
 // ---------- HTML validity ----------
@@ -133,7 +144,7 @@ function htmlValidate(hvBin, file) {
   }
   for (const f of results) {
     for (const m of f.messages) {
-      const msg = `${path.basename(file)} line ${m.line}: ${m.message} (rule "${m.ruleId}", see https://html-validate.org/rules/${m.ruleId}.html)`;
+      const msg = `${rel(file)} line ${m.line}: ${m.message} (rule "${m.ruleId}", see https://html-validate.org/rules/${m.ruleId}.html)`;
       (m.severity === 2 ? mustFix : shouldFix).push('[HTML] ' + msg);
     }
   }
@@ -183,11 +194,15 @@ async function motionAndFocusChecks(page) {
 
 // ---------- browser checks + screenshots ----------
 async function browserChecks(pw, axePath, file) {
-  const slug = path.basename(path.dirname(file)) === path.basename(process.cwd())
-    ? path.basename(file, '.html')
-    : path.relative(process.cwd(), file).replace(/[\\/]/g, '-').replace(/\.html?$/i, '');
-  const name = path.relative(process.cwd(), file) || path.basename(file);
-  const browser = await pw.chromium.launch();
+  const name = rel(file);
+  const slug = name.replace(/\.html?$/i, '').replace(/[\\/:]+/g, '-').replace(/^-+/, '');
+  const url = pathToFileURL(file).href;
+  let browser;
+  try { browser = await pw.chromium.launch(); } catch (e) {
+    skipped.push('Screenshots, the accessibility scan and the browser checks did not run: the browser could not start (' +
+      e.message.split('\n')[0] + '). Do not run "playwright install"; tell the user.');
+    return [];
+  }
   const axeSeen = new Map();
   const problemSeen = new Set();
   const shots = [];
@@ -196,8 +211,8 @@ async function browserChecks(pw, axePath, file) {
       const page = await browser.newPage({ viewport });
       const problems = [];
       page.on('pageerror', e => problems.push(`a script error happened: ${e.message}`));
-      page.on('requestfailed', r => { if (r.url().startsWith('file:')) problems.push(`could not load ${decodeURIComponent(r.url().replace(/^file:\/\//, ''))}`); });
-      await page.goto('file://' + file, { waitUntil: 'load' });
+      page.on('requestfailed', r => { if (r.url().startsWith('file:')) problems.push(`could not load ${fileURLToPath(r.url().split('?')[0])}`); });
+      await page.goto(url, { waitUntil: 'load' });
       await page.waitForTimeout(300);
 
       const facts = await page.evaluate(() => ({
@@ -248,7 +263,7 @@ async function browserChecks(pw, axePath, file) {
         }
         if (view === 'desktop') {
           const contrast = res.incomplete.find(v => v.id === 'color-contrast');
-          if (contrast) humanLook.push(`The scanner could not measure text contrast in ${contrast.nodes.length} spots (text over gradients or photos). Look at the screenshots: all text must be easy to read.`);
+          if (contrast) humanLook.push(`${name}: the scanner could not measure text contrast in ${contrast.nodes.length} spots (text over gradients or photos). Look at the screenshots: all text must be easy to read.`);
         }
       }
 
@@ -256,7 +271,7 @@ async function browserChecks(pw, axePath, file) {
       // The focus check tabbed down the page, and a sticky top bar can be drawn mid-page
       // in a full-page capture. So load the page fresh and make the window as tall as the
       // whole page before taking the picture.
-      await page.goto('file://' + file + '?shot', { waitUntil: 'load' });
+      await page.goto(url + '?shot', { waitUntil: 'load' });
       const fullHeight = await page.evaluate(() => document.documentElement.scrollHeight);
       await page.setViewportSize({ width: viewport.width, height: fullHeight });
       await page.waitForTimeout(300);
@@ -300,13 +315,17 @@ async function browserChecks(pw, axePath, file) {
     items.forEach((t, i) => console.log(`  ${i + 1}. ${t}`));
   };
   console.log(`Inside ISS page check: ${pages.map(p => path.relative(process.cwd(), p) || p).join(', ')}`);
-  console.log(`Checked against: WCAG 2.1 AA (axe-core ${AXE_VERSION} plus motion, focus and 320px checks), html-validate ${HTML_VALIDATE_VERSION}, plus newsletter rules.`);
+  console.log(`Checked against: ${[tools.axePath && pw ? `WCAG 2.1 AA (axe-core ${AXE_VERSION})` : null, pw ? 'motion, focus and 320px checks' : null,
+    tools.hvBin ? `html-validate ${HTML_VALIDATE_VERSION}` : null, 'newsletter rules'].filter(Boolean).join(', ')}.`);
   if (shots.length) { console.log('\nScreenshots (look at these, and show them to the user):'); shots.forEach(s => console.log('  ' + s)); }
   list('MUST FIX before publishing', mustFix);
   list('SHOULD FIX', shouldFix);
   list('NEEDS A PERSON TO LOOK', humanLook);
   if (skipped.length) list('CHECKS THAT DID NOT RUN', skipped);
-  console.log(`\nRESULT: ${mustFix.length ? 'FAIL: fix the "must fix" items first.' : 'PASS: no must-fix problems found.'}`);
+  const incomplete = skipped.length > 0;
+  console.log(`\nRESULT: ${mustFix.length ? 'FAIL: fix the "must fix" items first.'
+    : incomplete ? 'INCOMPLETE: no must-fix problems in the checks that ran, but some checks did not run (see above). Do not call the page checked.'
+    : 'PASS: no must-fix problems found.'}${mustFix.length && incomplete ? ' Some checks also did not run (see above).' : ''}`);
   console.log('Automated checks catch only part of accessibility problems. The screenshots and the "needs a person" list still matter.');
-  process.exit(mustFix.length ? 1 : 0);
+  process.exit(mustFix.length ? 1 : incomplete ? 2 : 0);
 })().catch(e => { console.error('The check could not run: ' + e.message); process.exit(2); });

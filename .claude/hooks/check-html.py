@@ -16,16 +16,18 @@ import os
 import re
 import sys
 from html.parser import HTMLParser
+from urllib.parse import unquote
 
 VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link",
         "meta", "param", "source", "track", "wbr"}
 # Tags whose end tag HTML lets you leave out; skip them in the nesting check.
 OPTIONAL_END = {"p", "li", "dt", "dd", "tr", "td", "th", "thead", "tbody",
-                "tfoot", "option", "colgroup", "caption", "rt", "rp", "optgroup"}
+                "tfoot", "option", "colgroup", "caption", "rt", "rp", "optgroup",
+                "html", "head", "body"}
 ALLOWED_FONTS = {"arial", "helvetica", "verdana", "geneva", "sans-serif",
                  "inherit", "initial", "unset", "system-ui"}
 PLACEHOLDER = re.compile(
-    r"\[(?:CONFIRM|TODO|TBD|Month Year|YEAR)[^\]]*\]|\bTODO\b|\bTBD\b|lorem ipsum", re.I)
+    r"\[(?:CONFIRM|TODO|TBD|Month Year|YEAR)\b[^\]]*\]|\bTODO\b|\bTBD\b|lorem ipsum", re.I)
 
 
 class Checker(HTMLParser):
@@ -35,6 +37,7 @@ class Checker(HTMLParser):
         self.problems = []
         self.ids = {}
         self.refs = []
+        self.css = []  # (line, css text) from style="" attributes and <style> blocks
 
     def where(self):
         return f"line {self.getpos()[0]}"
@@ -48,14 +51,20 @@ class Checker(HTMLParser):
                 self.problems.append(f"{self.where()}: duplicate id=\"{a['id']}\" (first used on line {self.ids[a['id']]})")
             else:
                 self.ids[a["id"]] = self.getpos()[0]
+        if a.get("style"):
+            self.css.append((self.getpos()[0], a["style"]))
         for key in ("src", "href"):
             v = (a.get(key) or "").strip()
-            if v and not re.match(r"^(https?:|mailto:|tel:|#|data:|//|javascript:)", v, re.I):
-                self.refs.append((self.getpos()[0], v.split("#")[0].split("?")[0]))
+            if v and not re.match(r"^(https?:|mailto:|tel:|sms:|#|data:|//|javascript:)", v, re.I):
+                self.refs.append((self.getpos()[0], unquote(v.split("#")[0].split("?")[0])))
         if tag == "a" and "href" in a and (a["href"] or "").strip() in ("", "#"):
             self.problems.append(f"{self.where()}: link has an empty href")
         if tag not in VOID:
             self.stack.append((tag, self.getpos()[0]))
+
+    def handle_data(self, data):
+        if self.stack and self.stack[-1][0] == "style":
+            self.css.append((self.getpos()[0], data))
 
     def handle_startendtag(self, tag, attrs):
         self.handle_starttag(tag, attrs)
@@ -86,14 +95,23 @@ def main():
     else:
         try:
             data = json.load(sys.stdin)
+            path = (data.get("tool_input") or {}).get("file_path") or ""
         except Exception:
             return 0
-        path = (data.get("tool_input") or {}).get("file_path") or ""
         # Only check pages inside this project, not scratch files elsewhere.
         project = os.environ.get("CLAUDE_PROJECT_DIR") or data.get("cwd") or ""
-        if project and not os.path.abspath(path).startswith(os.path.abspath(project) + os.sep):
-            return 0
+        if project:
+            real = lambda x: os.path.normcase(os.path.realpath(x))
+            try:
+                inside = os.path.commonpath([real(project), real(path)]) == real(project)
+            except ValueError:  # different drives on Windows
+                inside = False
+            if not inside:
+                return 0
     if not path.lower().endswith((".html", ".htm")) or not os.path.isfile(path):
+        if manual:
+            print(f"Can't check {sys.argv[1]}: not an .html file that exists", file=sys.stderr)
+            return 2
         return 0
     with open(path, encoding="utf-8", errors="replace") as f:
         text = f.read()
@@ -110,18 +128,20 @@ def main():
         if ref and not os.path.exists(os.path.join(base, ref)):
             c.problems.append(f"line {line}: file not found: {ref}")
 
-    for m in re.finditer(r"font-family\s*:\s*([^;}<>\n]+)", text, re.I):
-        # Names may be quoted ("Open Sans"); in a style="" attribute, stop at the closing quote.
-        value = m.group(1)
-        if value.count('"') % 2 == 1:
-            value = value.rsplit('"', 1)[0]
-        fonts = [x.strip().strip("'\"").lower() for x in value.split(",")]
-        bad = [x for x in fonts if x and x not in ALLOWED_FONTS and not x.startswith("var(")]
-        if bad:
-            c.problems.append(f"line {line_of(text, m.start())}: font not in the Orange County web fonts (Arial/Verdana): {', '.join(bad)}")
+    for start_line, css in c.css:
+        css = re.sub(r"/\*.*?\*/", lambda m: re.sub(r"[^\n]", " ", m.group(0)), css, flags=re.S)
+        for m in re.finditer(r"font-family\s*:\s*([^;}]+)", css, re.I):
+            value = re.sub(r"!\s*important", "", m.group(1), flags=re.I)
+            value = re.sub(r"var\(", "", value).replace(")", "")  # check var() fallbacks too
+            fonts = [x.strip().strip("'\"").lower() for x in value.split(",")]
+            bad = [x for x in fonts if x and x not in ALLOWED_FONTS and not x.startswith("--")]
+            if bad:
+                line = start_line + css.count("\n", 0, m.start())
+                c.problems.append(f"line {line}: font not in the Orange County web fonts (Arial/Verdana): {', '.join(bad)}")
 
     # Placeholders in what readers see (HTML comments are notes to editors, so skip them).
-    visible = re.sub(r"<!--.*?-->", lambda m: re.sub(r"[^\n]", " ", m.group(0)), text, flags=re.S)
+    visible = re.sub(r"<!--.*?-->|<script\b.*?</script\s*>|<style\b.*?</style\s*>",
+                     lambda m: re.sub(r"[^\n]", " ", m.group(0)), text, flags=re.S | re.I)
     for m in PLACEHOLDER.finditer(visible):
         c.problems.append(f"line {line_of(text, m.start())}: placeholder \"{m.group(0)}\" is still on the page. "
                           "Ask the user for the real wording; never make it up")
