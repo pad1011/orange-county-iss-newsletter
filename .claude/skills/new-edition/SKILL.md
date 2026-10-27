@@ -3,6 +3,7 @@ name: new-edition
 description: Start the next monthly edition of the Inside ISS newsletter from the copy the user provides, then check it and prepare it for review.
 argument-hint: "[Month Year, e.g. November 2026]"
 disable-model-invocation: true
+allowed-tools: Skill(verify) Bash(node .claude/skills/verify/scripts/check.cjs *) Bash(python3 .claude/hooks/check-html.py *) Read(//tmp/inside-iss-check/**) SendUserFile Bash(git log *) Bash(git status *) Bash(git diff *)
 ---
 
 # Start the $ARGUMENTS edition of Inside ISS

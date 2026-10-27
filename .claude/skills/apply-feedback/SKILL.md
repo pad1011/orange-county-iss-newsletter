@@ -3,6 +3,7 @@ name: apply-feedback
 description: Apply a reviewer's notes or edits to the Inside ISS newsletter as a checklist, and report exactly what changed where.
 argument-hint: "[paste the reviewer's notes, or leave empty]"
 disable-model-invocation: true
+allowed-tools: Skill(verify) Bash(node .claude/skills/verify/scripts/check.cjs *) Bash(python3 .claude/hooks/check-html.py *) Read(//tmp/inside-iss-check/**) SendUserFile Bash(git status *) Bash(git diff *)
 ---
 
 # Apply reviewer feedback

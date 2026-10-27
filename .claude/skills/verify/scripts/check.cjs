@@ -28,7 +28,8 @@ const VIEWPORTS = { desktop: { width: 1280, height: 900 }, phone: { width: 390, 
 
 // ---------- arguments ----------
 const args = process.argv.slice(2);
-let outDir = path.join(os.tmpdir(), 'inside-iss-check');
+// A fixed folder, so the verify skill can pre-approve reading the screenshots.
+let outDir = process.platform === 'win32' ? path.join(os.tmpdir(), 'inside-iss-check') : '/tmp/inside-iss-check';
 const pages = [];
 for (let i = 0; i < args.length; i++) {
   if (args[i] === '--out') outDir = path.resolve(args[++i]);
@@ -252,8 +253,23 @@ async function browserChecks(pw, axePath, file) {
       }
 
       const shot = path.join(outDir, `${slug}-${view}.png`);
-      await page.screenshot({ path: shot, fullPage: true });
+      // The focus check tabbed down the page, and a sticky top bar can be drawn mid-page
+      // in a full-page capture. So load the page fresh and make the window as tall as the
+      // whole page before taking the picture.
+      await page.goto('file://' + file + '?shot', { waitUntil: 'load' });
+      const fullHeight = await page.evaluate(() => document.documentElement.scrollHeight);
+      await page.setViewportSize({ width: viewport.width, height: fullHeight });
+      await page.waitForTimeout(300);
+      await page.screenshot({ path: shot });
       shots.push(shot);
+      if (view === 'phone') {
+        // The full phone page is too tall to read as one image, so also save it in parts.
+        for (let y = 0, i = 1; y < fullHeight; y += 1600, i++) {
+          const part = path.join(outDir, `${slug}-phone-part${i}.png`);
+          await page.screenshot({ path: part, clip: { x: 0, y, width: viewport.width, height: Math.min(1600, fullHeight - y) } });
+          shots.push(part);
+        }
+      }
       await page.close();
     }
   } finally {

@@ -110,8 +110,12 @@ def main():
         if ref and not os.path.exists(os.path.join(base, ref)):
             c.problems.append(f"line {line}: file not found: {ref}")
 
-    for m in re.finditer(r"font-family\s*:\s*([^;}\"]+)", text, re.I):
-        fonts = [x.strip().strip("'\"").lower() for x in m.group(1).split(",")]
+    for m in re.finditer(r"font-family\s*:\s*([^;}<>\n]+)", text, re.I):
+        # Names may be quoted ("Open Sans"); in a style="" attribute, stop at the closing quote.
+        value = m.group(1)
+        if value.count('"') % 2 == 1:
+            value = value.rsplit('"', 1)[0]
+        fonts = [x.strip().strip("'\"").lower() for x in value.split(",")]
         bad = [x for x in fonts if x and x not in ALLOWED_FONTS and not x.startswith("var(")]
         if bad:
             c.problems.append(f"line {line_of(text, m.start())}: font not in the Orange County web fonts (Arial/Verdana): {', '.join(bad)}")
