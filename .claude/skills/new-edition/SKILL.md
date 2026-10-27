@@ -22,7 +22,7 @@ Work through these steps in order. Keep the user informed in plain words, one sh
    - Add the edition to `archive/index.html` (create a simple list page titled "Inside ISS archive" in the same style if it doesn't exist yet).
    - Run the `verify` skill on the archived copy too, only to confirm its images and links work from the new folder. Fix only broken images or links there; the archive keeps the page exactly as it was published, including the known problems listed in `EDITIONS.md`.
    - Nothing on the live page links to the archive yet. The first time you archive, ask the user whether to add a "Past editions" link in the footer pointing to `archive/`; without it, employees can't find past editions.
-   - After that, archived editions are frozen: don't edit them again unless the user asks (for example, to fix a broken image). The ADA rule's "archived content" exception covers only content kept unchanged in an area clearly labeled as an archive.
+   - After that, archived editions are frozen: don't edit them again unless the user asks. The ADA rule's "archived content" exception (28 CFR 35.104) covers only content created before Orange County's compliance date (April 26, 2027), kept only for reference, not changed after archiving, and stored in an area clearly labeled as an archive. Editing an archived page later ends the exception for that page, and editions made after April 26, 2027 never qualify, so never tell the user an archived edition is exempt from accessibility rules.
    - Never delete or overwrite an image in `assets/` that an archived edition uses. Give new images month-prefixed names, for example `assets/2026-11-team-photo.jpg`.
 
 5. **Update `index.html` for the new month.** Change every month-specific spot:

@@ -17,7 +17,9 @@ except Exception:
     sys.exit(0)
 
 cmd = (data.get("tool_input") or {}).get("command") or ""
-if not re.search(r"\bgit\b[^;&|\n]*\bpush\b", cmd):
+# Look only at the push parts of a chained command, so "git fetch origin master && git push" isn't flagged.
+pushes = re.findall(r"\bgit\b[^;&|\n]*\bpush\b[^;&|\n]*", cmd)
+if not pushes:
     sys.exit(0)
 
 try:
@@ -26,7 +28,7 @@ try:
 except Exception:
     branch = ""
 
-if "master" in cmd or branch in ("master", "HEAD", ""):
+if any(re.search(r"master|--all\b|--mirror\b", p) for p in pushes) or branch in ("master", "HEAD", ""):
     print(json.dumps({"hookSpecificOutput": {
         "hookEventName": "PreToolUse",
         "permissionDecision": "ask",

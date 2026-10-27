@@ -1,0 +1,9 @@
+{
+  "name": "inside-iss-checkers",
+  "private": true,
+  "description": "Exact versions of the checkers the verify skill downloads into a temp folder. Not part of the website.",
+  "dependencies": {
+    "axe-core": "4.14.0",
+    "html-validate": "11.17.0"
+  }
+}

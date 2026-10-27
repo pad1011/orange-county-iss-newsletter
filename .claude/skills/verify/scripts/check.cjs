@@ -57,10 +57,12 @@ function ensureTools() {
   const hvBin = path.join(dir, 'node_modules', 'html-validate', 'bin', 'html-validate.mjs');
   if (!fs.existsSync(axePath) || !fs.existsSync(hvBin)) {
     fs.mkdirSync(dir, { recursive: true });
+    // Install the exact versions recorded in tools/package-lock.json, with install scripts off.
+    for (const f of ['package.json', 'package-lock.json']) fs.copyFileSync(path.join(__dirname, 'tools', f), path.join(dir, f));
     const win = process.platform === 'win32';
-    const r = spawnSync(win ? 'npm.cmd' : 'npm', ['install', '--no-save', '--no-audit', '--no-fund', '--loglevel=error',
+    const r = spawnSync(win ? 'npm.cmd' : 'npm', ['ci', '--ignore-scripts', '--no-audit', '--no-fund', '--loglevel=error',
       '--fetch-retries=1', '--fetch-retry-mintimeout=2000', '--fetch-retry-maxtimeout=5000', '--fetch-timeout=20000',
-      '--prefix', win ? `"${dir}"` : dir, `axe-core@${AXE_VERSION}`, `html-validate@${HTML_VALIDATE_VERSION}`],
+      '--prefix', win ? `"${dir}"` : dir],
       { encoding: 'utf8', timeout: 180000, shell: win });
     if (r.status !== 0) {
       const lines = (r.stderr || String(r.error || '')).trim().split('\n').filter(l => !/complete log of this run/i.test(l));

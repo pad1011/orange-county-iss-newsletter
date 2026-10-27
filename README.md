@@ -40,6 +40,18 @@ Tips:
 | `.claude/` | Claude's setup: settings, the `/new-edition`, `/apply-feedback` and `/verify` shortcuts, the automatic page check, and the plain-English answer style |
 | `_config.yml` | Keeps the notes files off the live site |
 
+## One-time setup: protect the live page
+
+Do this once, so nothing (not Claude, not a mistaken click) can change the live page without a pull request.
+
+1. On GitHub, open this repository and click **Settings**.
+2. In the left menu, under **Code, planning, and automation**, click **Rules**, then **Rulesets**.
+3. Click **New ruleset**, then **New branch ruleset**.
+4. For **Ruleset Name**, type `Protect live newsletter`. **Enforcement status** starts as **Disabled**: change it to **Active**. Leave **Bypass list** empty.
+5. Under **Target branches**, click **Add target**, then **Include default branch**.
+6. Under **Branch rules**, keep **Restrict deletions** and **Block force pushes** ticked, and tick **Require a pull request before merging**. Set **Required approvals** to 0 (GitHub doesn't let you approve your own pull request).
+7. Click **Create**.
+
 ## If something goes wrong
 
 - **The live page looks wrong after a merge:** on GitHub, open the merged pull request and click **Revert**, then merge the revert pull request. The page goes back to how it was.
